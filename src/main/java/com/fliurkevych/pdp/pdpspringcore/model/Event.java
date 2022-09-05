@@ -1,16 +1,14 @@
 package com.fliurkevych.pdp.pdpspringcore.model;
 
+import lombok.Data;
+
 import java.util.Date;
 
-public interface Event {
-    /**
-     * Event id. UNIQUE.
-     * @return Event Id
-     */
-    long getId();
-    void setId(long id);
-    String getTitle();
-    void setTitle(String title);
-    Date getDate();
-    void setDate(Date date);
+@Data
+public class Event {
+    
+  private Long id;
+  private String title;
+  private Date date;
+
 }

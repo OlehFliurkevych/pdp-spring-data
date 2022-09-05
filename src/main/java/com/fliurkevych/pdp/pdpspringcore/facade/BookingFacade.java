@@ -1,5 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.facade;
 
+import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.model.User;
@@ -123,7 +124,7 @@ public interface BookingFacade {
    * @return Booked ticket object.
    * @throws java.lang.IllegalStateException if this place has already been booked.
    */
-  Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category);
+  Ticket bookTicket(long userId, long eventId, int place, TicketCategory category);
 
   /**
    * Get all booked tickets for specified user. Tickets should be sorted by event date in descending

@@ -1,19 +1,14 @@
 package com.fliurkevych.pdp.pdpspringcore.model;
 
-public interface User {
-    /**
-     * User Id. UNIQUE.
-     * @return User Id.
-     */
-    long getId();
-    void setId(long id);
-    String getName();
-    void setName(String name);
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-    /**
-     * User email. UNIQUE.
-     * @return User email.
-     */
-    String getEmail();
-    void setEmail(String email);
+@Data
+@AllArgsConstructor
+public class User {
+
+  private Long id;
+  private String name;
+  private String email;
+  
 }
