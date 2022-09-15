@@ -22,9 +22,9 @@ import java.util.List;
 @Service
 public class BookingFacadeImpl implements BookingFacade {
 
-  private UserService userService;
-  private TicketService ticketService;
-  private EventService eventService;
+  private final UserService userService;
+  private final TicketService ticketService;
+  private final EventService eventService;
 
   @Autowired
   public BookingFacadeImpl(UserService userService,
@@ -36,32 +36,32 @@ public class BookingFacadeImpl implements BookingFacade {
 
   @Override
   public Event getEventById(long eventId) {
-    return null;
+    return eventService.getEventById(eventId);
   }
 
   @Override
   public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
-    return null;
+    return eventService.getEventsByTitle(title, pageSize, pageNum);
   }
 
   @Override
   public List<Event> getEventsForDay(Date day, int pageSize, int pageNum) {
-    return null;
+    return eventService.getEventsByDate(day, pageSize, pageNum);
   }
 
   @Override
   public Event createEvent(Event event) {
-    return null;
+    return eventService.createEvent(event);
   }
 
   @Override
   public Event updateEvent(Event event) {
-    return null;
+    return eventService.updateEvent(event);
   }
 
   @Override
   public boolean deleteEvent(long eventId) {
-    return false;
+    return eventService.deleteEvent(eventId);
   }
 
   @Override

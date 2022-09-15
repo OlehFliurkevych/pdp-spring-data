@@ -3,14 +3,11 @@ package com.fliurkevych.pdp.pdpspringcore.repository;
 import static com.fliurkevych.pdp.pdpspringcore.util.CacheConstants.USERS_CACHE_NAME;
 
 import com.fliurkevych.pdp.pdpspringcore.model.User;
-import com.fliurkevych.pdp.pdpspringcore.util.CacheConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.stereotype.Component;
 
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
 import javax.annotation.PostConstruct;
@@ -30,7 +27,7 @@ public class UserRepository {
   private void populateCache() {
     var cache = cacheManager.getCache(USERS_CACHE_NAME);
     if (Objects.nonNull(cache)) {
-      for (int i = 0; i < 50; i++) {
+      for (int i = 0; i < 1000; i++) {
         var user = new User((long) i, "User" + i, "user_" + i + "@gmail.com");
         var userId = user.getId();
         cache.put(user.getId(), user);

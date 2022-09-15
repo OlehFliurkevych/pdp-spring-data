@@ -1,9 +1,11 @@
 package com.fliurkevych.pdp.pdpspringcore.model;
 
 import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Ticket {
 
   private Long id;
