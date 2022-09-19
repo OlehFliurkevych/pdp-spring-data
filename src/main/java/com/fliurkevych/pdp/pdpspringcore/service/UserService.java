@@ -55,7 +55,7 @@ public class UserService {
     if (optional.isPresent()) {
       return userRepository.update(user);
     } else {
-      throw new ValidationException(
+      throw new NotFoundException(
         String.format("Can not found element with key: [%s]", user.getId()));
     }
   }
@@ -66,7 +66,7 @@ public class UserService {
     if (optional.isPresent()) {
       return userRepository.delete(userId);
     } else {
-      throw new ValidationException(
+      throw new NotFoundException(
         String.format("Can not found element with key: [%s]", userId));
     }
   }

@@ -27,8 +27,8 @@ public class BookingFacadeImpl implements BookingFacade {
   private final EventService eventService;
 
   @Autowired
-  public BookingFacadeImpl(UserService userService,
-    TicketService ticketService, EventService eventService) {
+  public BookingFacadeImpl(UserService userService, TicketService ticketService,
+    EventService eventService) {
     this.userService = userService;
     this.ticketService = ticketService;
     this.eventService = eventService;
@@ -96,21 +96,21 @@ public class BookingFacadeImpl implements BookingFacade {
 
   @Override
   public Ticket bookTicket(long userId, long eventId, int place, TicketCategory category) {
-    return null;
+    return ticketService.bookTicket(userId, eventId, place, category);
   }
 
   @Override
   public List<Ticket> getBookedTickets(User user, int pageSize, int pageNum) {
-    return null;
+    return ticketService.getBookedTickets(user, pageSize, pageNum);
   }
 
   @Override
   public List<Ticket> getBookedTickets(Event event, int pageSize, int pageNum) {
-    return null;
+    return ticketService.getBookedTickets(event, pageSize, pageNum);
   }
 
   @Override
   public boolean cancelTicket(long ticketId) {
-    return false;
+    return ticketService.cancelTicket(ticketId);
   }
 }

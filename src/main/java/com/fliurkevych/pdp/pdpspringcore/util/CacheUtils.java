@@ -1,6 +1,5 @@
 package com.fliurkevych.pdp.pdpspringcore.util;
 
-import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
 import com.fliurkevych.pdp.pdpspringcore.exception.NotSupportedException;
 import org.springframework.cache.Cache;
 
@@ -24,7 +23,7 @@ public final class CacheUtils {
     return Optional.ofNullable(cache)
       .map(c -> c.get(key))
       .map(wrapper -> (T) wrapper.get());
-    
+
   }
 
 }

@@ -57,7 +57,7 @@ public class EventService {
     if (optional.isPresent()) {
       return eventRepository.update(event);
     } else {
-      throw new ValidationException(
+      throw new NotFoundException(
         String.format("Can not found element with key: [%s]", event.getId()));
     }
   }
@@ -68,7 +68,7 @@ public class EventService {
     if (optional.isPresent()) {
       return eventRepository.delete(eventId);
     } else {
-      throw new ValidationException(
+      throw new NotFoundException(
         String.format("Can not found element with key: [%s]", eventId));
     }
   }
