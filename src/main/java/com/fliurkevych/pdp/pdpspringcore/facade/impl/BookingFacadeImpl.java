@@ -66,32 +66,32 @@ public class BookingFacadeImpl implements BookingFacade {
 
   @Override
   public User getUserById(long userId) {
-    return null;
+    return userService.getUserById(userId);
   }
 
   @Override
   public User getUserByEmail(String email) {
-    return null;
+    return userService.getUserByEmail(email);
   }
 
   @Override
   public List<User> getUsersByName(String name, int pageSize, int pageNum) {
-    return null;
+    return userService.getUsersByName(name, pageSize, pageNum);
   }
 
   @Override
   public User createUser(User user) {
-    return null;
+    return userService.createUser(user);
   }
 
   @Override
   public User updateUser(User user) {
-    return null;
+    return userService.updateUser(user);
   }
 
   @Override
   public boolean deleteUser(long userId) {
-    return false;
+    return userService.deleteUser(userId);
   }
 
   @Override
