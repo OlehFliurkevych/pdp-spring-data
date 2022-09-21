@@ -18,12 +18,13 @@ import java.util.List;
 @RequestMapping("/events")
 public class EventController {
 
+  // TODO: field injection considered as bad practice
   @Autowired
   private EventService eventService;
 
   @GetMapping(path = "/search")
   public ResponseEntity<List<Event>> getEventsByTitle(@RequestParam String title,
-    @RequestParam int pageSize,
+    @RequestParam int pageSize, // Why not to use spring Pageable?
     @RequestParam int pageNum) {
     return ResponseEntity.ok(eventService.getEventsByTitle(title, pageSize, pageNum));
   }

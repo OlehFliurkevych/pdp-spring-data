@@ -21,6 +21,8 @@ import java.util.Random;
 @Service
 public class TicketService {
 
+  private final Random random;
+
   @Autowired
   private TicketRepository ticketRepository;
   @Autowired
@@ -28,13 +30,16 @@ public class TicketService {
   @Autowired
   private EventService eventService;
 
+  public TicketService() {
+    this.random = new Random();
+  }
+
   public Ticket bookTicket(long userId, long eventId, int place, TicketCategory category) {
     log.info("User with id [{}] try to book ticket for event with id [{}]", userId, eventId);
     var user = userService.getUserById(userId);
     var event = eventService.getEventById(eventId);
     validatePlaceNumber(place);
 
-    Random random = new Random();
     var ticket =
       new Ticket((long) random.nextInt(1000), event.getId(), user.getId(), place, category);
 
