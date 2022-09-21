@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public final class CacheUtils {
 
+  @SuppressWarnings("unchecked")
   public static <T> ConcurrentMap<Long, T> getAllElements(Cache cache, Class<T> tClass) {
     return Optional.ofNullable(cache)
       .map(Cache::getNativeCache)
@@ -22,8 +23,6 @@ public final class CacheUtils {
   public static <T> Optional<T> getElementByKey(Cache cache, Long key, Class<T> tClass) {
     return Optional.ofNullable(cache)
       .map(c -> c.get(key))
-      .map(wrapper -> (T) wrapper.get());
-
+      .map(wrapper -> tClass.cast(wrapper.get()));
   }
-
 }

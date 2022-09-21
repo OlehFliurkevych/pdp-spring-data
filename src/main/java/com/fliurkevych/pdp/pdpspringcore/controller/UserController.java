@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-  @Autowired
+  @Autowired //TODO: field injection
   private UserService userService;
 
   @GetMapping(path = "/{userId}")
