@@ -1,15 +1,20 @@
-# pdp-spring-core
+# pdp-spring-mvc
 
-project for resolving tasks from _**Spring Core**_ module in scope of preparing to assesment.
+project for resolving tasks from _**Spring MVC**_ module in scope of preparing to assesment.
 
 ## Task
 ### Create a Spring-based module, which handles event ticket booking. 
 
 Rules:
-- Implement three service classes: UserService, EventService, Ticket service.
-Which should contain user, event, and booking-related functionality accordingly. Create an implementation of the BookingFacade interface which should delegate method calls to services mentioned above.
-- Implement DAO objects for each of the domain model entities (User, Event, Ticket). They should store in and retrieve data from a common in-memory storage - java map. Each entity should be stored under a separate namespace, so you could list particular entity types.
-- Storage should be implemented as a separate spring bean. Implement the ability to initialize storage with some prepared data from the file during the application start (use spring bean post-processing features). Path to the concrete file should be set using property placeholder and external property file.
-- DAO with storage bean should be inserted into services beans using auto wiring. Services beans should be injected into the facade using constructor-based injections. The rest of the injections should be done in a setter-based way.
-- Cover code with unit tests.
-- Code should contain proper logging.
+- Transform project from Spring Introduction module into a web application, configure dispatcher servlet.
+- Implement annotation-based controllers that will delegate to BookingFacade methods. For methods, that accept Entity, just send the list of parameters from the client and assemble the entity in the controller, no need for automatic conversion of request payload to java object.
+- For methods, that should return a single entity or entity list result (e.g. getUsersByName), implement simple thymeleaf templates for displaying results. No sophisticated markup required, just the fact that you know how to implement the chain:
+ModelAndView à Resolver à ThymeleafTemplate à Html page in the browser.
+- For the following facade method:
+List getBookedTickets(User user, int pageSize, int pageNum);
+Implement alternative controller, which will be mapped on header value "accept=application/pdf" and return PDF version of booked tickets list. 
+- Implement batch creation of ticket bookings from XML file. Source file example:
+Add a method public void preloadTickets() to facade that will load this file from some predefined place (or from a location specified in parameter), unmarshal ticket objects using Spring OXM capabilities and update the storage. The whole batch should be performed in a single transaction, using programmatic transaction management.
+- Implement custom HandlerExceptionResolver, which in case of controller exception just send a simple text response to the client with a brief description of the error.
+- Unit tests, logging, javadocs.
+- Implement integration tests for Booking service controllers using the MockMVC framework.
