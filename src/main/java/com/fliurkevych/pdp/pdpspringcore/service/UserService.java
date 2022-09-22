@@ -17,8 +17,12 @@ import java.util.List;
 @Service
 public class UserService {
 
-  @Autowired // TODO: field injection
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+
+  @Autowired
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   public User getUserById(Long userId) {
     log.info("Getting user by id: {}", userId);
@@ -40,34 +44,28 @@ public class UserService {
   public User createUser(User user) {
     log.info("Creating new user with name [{}] and email [{}]", user.getName(), user.getEmail());
 
-    return userRepository.getUserById(user.getId())
-      .map(userRepository::save)
-      .orElseThrow(() -> new ValidationException(
-        String.format("User with id [%s] have already created", user.getId())));
+    if (userRepository.getUserById(user.getId()).isEmpty()) {
+      return userRepository.save(user);
+    }
+    throw new ValidationException(
+      String.format("User with id [%s] have already created", user.getId()));
   }
 
   public User updateUser(User user) {
     log.info("Updating user with id [{}]", user.getId());
-    // TODO: use optional in more idiomatic way, through map().orElseThrow() chain
-    var optional = userRepository.getUserById(user.getId());
-    if (optional.isPresent()) {
-      return userRepository.update(user);
-    } else {
-      throw new NotFoundException(
-        String.format("Can not found element with key: [%s]", user.getId()));
-    }
+
+    return userRepository.getUserById(user.getId())
+      .map(userRepository::update)
+      .orElseThrow(() -> new NotFoundException(
+        String.format("Can not found element with key: [%s]", user.getId())));
   }
 
   public boolean deleteUser(Long userId) {
     log.info("Deleting user with id [{}]", userId);
-    // TODO: use optional in more idiomatic way, through map().orElseThrow() chain
-    var optional = userRepository.getUserById(userId);
-    if (optional.isPresent()) {
-      return userRepository.delete(userId);
-    } else {
-      throw new NotFoundException(
-        String.format("Can not found element with key: [%s]", userId));
-    }
+    return userRepository.getUserById(userId)
+      .map(user -> userRepository.delete(user.getId()))
+      .orElseThrow(() -> new NotFoundException(
+        String.format("Can not found element with key: [%s]", userId)));
   }
 
 }

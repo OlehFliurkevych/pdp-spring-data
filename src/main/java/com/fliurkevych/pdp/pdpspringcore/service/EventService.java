@@ -18,8 +18,12 @@ import java.util.List;
 @Service
 public class EventService {
 
+  private final EventRepository eventRepository;
+
   @Autowired
-  private EventRepository eventRepository;
+  public EventService(EventRepository eventRepository) {
+    this.eventRepository = eventRepository;
+  }
 
   public Event getEventById(Long eventId) {
     log.info("Getting event by id: {}", eventId);
@@ -42,8 +46,8 @@ public class EventService {
   public Event createEvent(Event event) {
     log.info("Creating new event with title [{}], for date [{}]",
       event.getTitle(), event.getDate());
-    var optional = eventRepository.getEventById(event.getId());
-    if (optional.isEmpty()) {
+
+    if (eventRepository.getEventById(event.getId()).isEmpty()) {
       return eventRepository.save(event);
     } else {
       throw new ValidationException(
@@ -53,24 +57,20 @@ public class EventService {
 
   public Event updateEvent(Event event) {
     log.info("Updating event with id [{}]", event.getId());
-    var optional = eventRepository.getEventById(event.getId());
-    if (optional.isPresent()) {
-      return eventRepository.update(event);
-    } else {
-      throw new NotFoundException(
-        String.format("Can not found element with key: [%s]", event.getId()));
-    }
+
+    return eventRepository.getEventById(event.getId())
+      .map(eventRepository::update)
+      .orElseThrow(() -> new NotFoundException(
+        String.format("Can not found element with key: [%s]", event.getId())));
   }
 
   public boolean deleteEvent(Long eventId) {
     log.info("Deleting event with id [{}]", eventId);
-    var optional = eventRepository.getEventById(eventId);
-    if (optional.isPresent()) {
-      return eventRepository.delete(eventId);
-    } else {
-      throw new NotFoundException(
-        String.format("Can not found element with key: [%s]", eventId));
-    }
+
+    return eventRepository.getEventById(eventId)
+      .map(event -> eventRepository.delete(event.getId()))
+      .orElseThrow(() -> new NotFoundException(
+        String.format("Can not found element with key: [%s]", eventId)));
   }
 
 }

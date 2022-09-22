@@ -22,13 +22,18 @@ import java.util.Random;
 public class TicketService {
 
   private final Random random;
+  private TicketRepository ticketRepository;
+  private UserService userService;
+  private EventService eventService;
 
   @Autowired
-  private TicketRepository ticketRepository;
-  @Autowired
-  private UserService userService;
-  @Autowired
-  private EventService eventService;
+  public TicketService(TicketRepository ticketRepository, UserService userService,
+    EventService eventService) {
+    this.random = new Random();
+    this.ticketRepository = ticketRepository;
+    this.userService = userService;
+    this.eventService = eventService;
+  }
 
   public TicketService() {
     this.random = new Random();
