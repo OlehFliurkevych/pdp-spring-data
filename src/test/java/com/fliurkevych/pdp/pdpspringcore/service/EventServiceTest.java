@@ -17,6 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,8 @@ import java.util.Optional;
  */
 @ExtendWith(MockitoExtension.class)
 public class EventServiceTest {
+
+  private static final Pageable PAGEABLE = PageRequest.of(1, 10);
 
   @Mock
   private EventRepository eventRepository;
@@ -57,7 +61,7 @@ public class EventServiceTest {
 
     when(eventRepository.getEventsByTitle("title 11", 10, 1)).thenReturn(List.of(event1, event2));
 
-    var result = eventService.getEventsByTitle("title 11", 10, 1);
+    var result = eventService.getEventsByTitle("title 11", PAGEABLE);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(2, result.size());
   }
@@ -70,7 +74,7 @@ public class EventServiceTest {
     when(eventRepository.getEventsForDay(DATE_1, 10, 1)).thenReturn(
       List.of(event1, event2));
 
-    var result = eventService.getEventsByDate(DATE_1, 10, 1);
+    var result = eventService.getEventsByDate(DATE_1, PAGEABLE);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(2, result.size());
   }

@@ -6,6 +6,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -33,14 +34,15 @@ public class EventService {
           String.format("Can not found element with key: [%s]", eventId)));
   }
 
-  public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
+  public List<Event> getEventsByTitle(String title, Pageable pageable) {
     log.info("Getting events by title: {}", title);
-    return eventRepository.getEventsByTitle(title, pageSize, pageNum);
+    return eventRepository
+      .getEventsByTitle(title, pageable.getPageSize(), pageable.getPageNumber());
   }
 
-  public List<Event> getEventsByDate(Date date, int pageSize, int pageNum) {
+  public List<Event> getEventsByDate(Date date, Pageable pageable) {
     log.info("Getting events by date: {}", date);
-    return eventRepository.getEventsForDay(date, pageSize, pageNum);
+    return eventRepository.getEventsForDay(date, pageable.getPageSize(), pageable.getPageNumber());
   }
 
   public Event createEvent(Event event) {

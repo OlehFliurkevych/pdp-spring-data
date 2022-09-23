@@ -15,6 +15,7 @@
 	<description>Pdp project for Spring Core module</description>
 	<properties>
 		<java.version>11</java.version>
+		<spring.version>2.7.3</spring.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -36,6 +37,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

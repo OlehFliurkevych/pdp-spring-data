@@ -1,9 +1,10 @@
 package com.fliurkevych.pdp.pdpspringcore.facade;
 
-import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
+import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.model.User;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
@@ -25,21 +26,19 @@ public interface BookingFacade {
    * nothing was found, empty list is returned.
    *
    * @param title Event title or it's part.
-   * @param pageSize Pagination param. Number of events to return on a page.
-   * @param pageNum Pagination param. Number of the page to return. Starts from 1.
+   * @param pageable {@link Pageable}
    * @return List of events.
    */
-  List<Event> getEventsByTitle(String title, int pageSize, int pageNum);
+  List<Event> getEventsByTitle(String title, Pageable pageable);
 
   /**
    * Get list of events for specified day. In case nothing was found, empty list is returned.
    *
    * @param day Date object from which day information is extracted.
-   * @param pageSize Pagination param. Number of events to return on a page.
-   * @param pageNum Pagination param. Number of the page to return. Starts from 1.
+   * @param pageable {@link Pageable}
    * @return List of events.
    */
-  List<Event> getEventsForDay(Date day, int pageSize, int pageNum);
+  List<Event> getEventsForDay(Date day, Pageable pageable);
 
   /**
    * Creates new event. Event id should be auto-generated.
@@ -84,11 +83,10 @@ public interface BookingFacade {
    * was found, empty list is returned.
    *
    * @param name Users name or it's part.
-   * @param pageSize Pagination param. Number of users to return on a page.
-   * @param pageNum Pagination param. Number of the page to return. Starts from 1.
+   * @param pageable {@link Pageable}
    * @return List of users.
    */
-  List<User> getUsersByName(String name, int pageSize, int pageNum);
+  List<User> getUsersByName(String name, Pageable pageable);
 
   /**
    * Creates new user. User id should be auto-generated.
@@ -117,36 +115,31 @@ public interface BookingFacade {
   /**
    * Book ticket for a specified event on behalf of specified user.
    *
-   * @param userId User Id.
-   * @param eventId Event Id.
-   * @param place Place number.
-   * @param category Service category.
+   * @param bookTicketDto {@link BookTicketDto}
    * @return Booked ticket object.
    * @throws java.lang.IllegalStateException if this place has already been booked.
    */
-  Ticket bookTicket(long userId, long eventId, int place, TicketCategory category);
+  Ticket bookTicket(BookTicketDto bookTicketDto);
 
   /**
    * Get all booked tickets for specified user. Tickets should be sorted by event date in descending
    * order.
    *
-   * @param user User
-   * @param pageSize Pagination param. Number of tickets to return on a page.
-   * @param pageNum Pagination param. Number of the page to return. Starts from 1.
+   * @param userId id of user
+   * @param pageable {@link Pageable}
    * @return List of Ticket objects.
    */
-  List<Ticket> getBookedTickets(User user, int pageSize, int pageNum);
+  List<Ticket> getBookedTicketsByUserId(Long userId, Pageable pageable);
 
   /**
    * Get all booked tickets for specified event. Tickets should be sorted in by user email in
    * ascending order.
    *
-   * @param event Event
-   * @param pageSize Pagination param. Number of tickets to return on a page.
-   * @param pageNum Pagination param. Number of the page to return. Starts from 1.
+   * @param eventId id of event
+   * @param pageable {@link Pageable}
    * @return List of Ticket objects.
    */
-  List<Ticket> getBookedTickets(Event event, int pageSize, int pageNum);
+  List<Ticket> getBookedTicketsByEventId(Long eventId, Pageable pageable);
 
   /**
    * Cancel ticket with a specified id.

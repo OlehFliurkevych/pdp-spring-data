@@ -1,6 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.facade.impl;
 
-import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
+import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.facade.BookingFacade;
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
@@ -10,6 +10,7 @@ import com.fliurkevych.pdp.pdpspringcore.service.TicketService;
 import com.fliurkevych.pdp.pdpspringcore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -40,13 +41,13 @@ public class BookingFacadeImpl implements BookingFacade {
   }
 
   @Override
-  public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
-    return eventService.getEventsByTitle(title, pageSize, pageNum);
+  public List<Event> getEventsByTitle(String title, Pageable pageable) {
+    return eventService.getEventsByTitle(title, pageable);
   }
 
   @Override
-  public List<Event> getEventsForDay(Date day, int pageSize, int pageNum) {
-    return eventService.getEventsByDate(day, pageSize, pageNum);
+  public List<Event> getEventsForDay(Date day, Pageable pageable) {
+    return eventService.getEventsByDate(day, pageable);
   }
 
   @Override
@@ -75,8 +76,8 @@ public class BookingFacadeImpl implements BookingFacade {
   }
 
   @Override
-  public List<User> getUsersByName(String name, int pageSize, int pageNum) {
-    return userService.getUsersByName(name, pageSize, pageNum);
+  public List<User> getUsersByName(String name, Pageable pageable) {
+    return userService.getUsersByName(name, pageable);
   }
 
   @Override
@@ -95,18 +96,18 @@ public class BookingFacadeImpl implements BookingFacade {
   }
 
   @Override
-  public Ticket bookTicket(long userId, long eventId, int place, TicketCategory category) {
-    return ticketService.bookTicket(userId, eventId, place, category);
+  public Ticket bookTicket(BookTicketDto bookTicketDto) {
+    return ticketService.bookTicket(bookTicketDto);
   }
 
   @Override
-  public List<Ticket> getBookedTickets(User user, int pageSize, int pageNum) {
-    return ticketService.getBookedTickets(user, pageSize, pageNum);
+  public List<Ticket> getBookedTicketsByUserId(Long userId, Pageable pageable) {
+    return ticketService.getBookedTicketsByUserId(userId, pageable);
   }
 
   @Override
-  public List<Ticket> getBookedTickets(Event event, int pageSize, int pageNum) {
-    return ticketService.getBookedTickets(event, pageSize, pageNum);
+  public List<Ticket> getBookedTicketsByEventId(Long eventId, Pageable pageable) {
+    return ticketService.getBookedTicketsByEventId(eventId, pageable);
   }
 
   @Override

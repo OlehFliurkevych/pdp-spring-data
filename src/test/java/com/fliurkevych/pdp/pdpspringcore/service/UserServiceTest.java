@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,8 @@ import java.util.Optional;
  */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
+
+  public static final Pageable PAGEABLE = PageRequest.of(1, 10);
 
   @Mock
   private UserRepository userRepository;
@@ -76,7 +80,7 @@ public class UserServiceTest {
 
     when(userRepository.getUsersByName("name 11", 10, 1)).thenReturn(List.of(user1, user2));
 
-    var result = userService.getUsersByName("name 11", 10, 1);
+    var result = userService.getUsersByName("name 11", PAGEABLE);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(2, result.size());
   }

@@ -6,6 +6,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,9 +37,9 @@ public class UserService {
       String.format("Can not found user by email: [%s]", email)));
   }
 
-  public List<User> getUsersByName(String name, int pageSize, int pageNum) {
+  public List<User> getUsersByName(String name, Pageable pageable) {
     log.info("Getting users by name: {}", name);
-    return userRepository.getUsersByName(name, pageSize, pageNum);
+    return userRepository.getUsersByName(name, pageable.getPageSize(), pageable.getPageNumber());
   }
 
   public User createUser(User user) {
