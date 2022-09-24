@@ -20,12 +20,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(value = {Exception.class})
   protected ResponseEntity<Object> handleBaseException(final Exception e,
     final WebRequest request) {
-    log.error(e.getMessage(), e);
+    var message = e.getMessage();
+    log.error(message, e);
 
-    var error = ErrorResponse.builder()
-      .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-      .text(e.getMessage())
-      .build();
+    var error = ErrorResponse.of(message);
     return handleExceptionInternal(e, error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
       request);
   }
@@ -33,12 +31,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(value = {NotFoundException.class})
   protected ResponseEntity<Object> handleNotFoundException(final NotFoundException e,
     final WebRequest request) {
-    log.error(e.getMessage(), e);
+    var message = e.getMessage();
+    log.error(message, e);
 
-    var error = ErrorResponse.builder()
-      .code(HttpStatus.NOT_FOUND.value())
-      .text(e.getMessage())
-      .build();
+    var error = ErrorResponse.of(message);
     return handleExceptionInternal(e, error, new HttpHeaders(), HttpStatus.NOT_FOUND,
       request);
   }
@@ -46,12 +42,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(value = {NotSupportedException.class})
   protected ResponseEntity<Object> handleNotSupportedException(final NotFoundException e,
     final WebRequest request) {
-    log.error(e.getMessage(), e);
+    var message = e.getMessage();
+    log.error(message, e);
 
-    var error = ErrorResponse.builder()
-      .code(HttpStatus.NOT_IMPLEMENTED.value())
-      .text(e.getMessage())
-      .build();
+    var error = ErrorResponse.of(message);
     return handleExceptionInternal(e, error, new HttpHeaders(),
       HttpStatus.NOT_IMPLEMENTED, request);
   }
@@ -59,12 +53,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(value = {ValidationException.class})
   protected ResponseEntity<Object> handleValidationException(final NotFoundException e,
     final WebRequest request) {
-    log.error(e.getMessage(), e);
+    var message = e.getMessage();
+    log.error(message, e);
 
-    var error = ErrorResponse.builder()
-      .code(HttpStatus.BAD_REQUEST.value())
-      .text(e.getMessage())
-      .build();
+    var error = ErrorResponse.of(message);
     return handleExceptionInternal(e, error, new HttpHeaders(),
       HttpStatus.BAD_REQUEST, request);
   }
