@@ -2,6 +2,7 @@ package com.fliurkevych.pdp.pdpspringcore.storage;
 
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,6 @@ public interface EventStorage {
   Event update(Event event);
 
   boolean delete(Long eventId);
+
+  Collection<Event> getAllEvents();
 }

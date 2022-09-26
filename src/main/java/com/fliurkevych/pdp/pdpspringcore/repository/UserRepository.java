@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -83,6 +84,11 @@ public class UserRepository {
 
   public boolean delete(Long userId) {
     return cacheManager.getCache(USERS_CACHE_NAME).evictIfPresent(userId);
+  }
+
+  public Collection<User> getAllUsers() {
+    return CacheUtils.getAllElements(
+      cacheManager.getCache(USERS_CACHE_NAME), User.class).values();
   }
 
 }

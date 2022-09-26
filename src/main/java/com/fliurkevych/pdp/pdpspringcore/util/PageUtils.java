@@ -28,8 +28,8 @@ public final class PageUtils {
   }
 
   public static  <T> List<T> getPage(List<List<T>> pages, int pageNum) {
-    if (pages.size() >= pageNum) {
-      return pages.get(pageNum - 1);
+    if (pages.size() >= pageNum + 1) {
+      return pages.get(pageNum);
     } else {
       return Collections.emptyList();
     }

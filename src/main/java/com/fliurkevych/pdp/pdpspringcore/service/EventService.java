@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Oleh Fliurkevych
@@ -73,6 +75,12 @@ public class EventService {
       .map(event -> eventRepository.delete(event.getId()))
       .orElseThrow(() -> new NotFoundException(
         String.format("Can not found element with key: [%s]", eventId)));
+  }
+  
+  public List<Event> getAllEvents(){
+    log.info("Getting all events");
+    
+    return new ArrayList<>(eventRepository.getAllEvents());
   }
 
 }

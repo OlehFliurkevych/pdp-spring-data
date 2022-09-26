@@ -149,4 +149,18 @@ public interface BookingFacade {
    */
   boolean cancelTicket(long ticketId);
 
+  /**
+   * Get all users
+   *
+   * @return List of {@link User} objects.
+   */
+  List<User> getAllUsers();
+
+  /**
+   * Get all events
+   *
+   * @return List of {@link Event} objects.
+   */
+  List<Event> getAllEvents();
+
 }

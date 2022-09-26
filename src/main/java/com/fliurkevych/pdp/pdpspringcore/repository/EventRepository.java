@@ -1,11 +1,16 @@
 package com.fliurkevych.pdp.pdpspringcore.repository;
 
+import static com.fliurkevych.pdp.pdpspringcore.util.CacheConstants.USERS_CACHE_NAME;
+
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
+import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
+import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -46,5 +51,9 @@ public class EventRepository {
 
   public boolean delete(Long eventId) {
     return storage.delete(eventId);
+  }
+
+  public Collection<Event> getAllEvents() {
+    return storage.getAllEvents();
   }
 }

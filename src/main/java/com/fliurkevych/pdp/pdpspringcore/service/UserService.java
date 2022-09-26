@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Oleh Fliurkevych
@@ -67,6 +70,12 @@ public class UserService {
       .map(user -> userRepository.delete(user.getId()))
       .orElseThrow(() -> new NotFoundException(
         String.format("Can not found element with key: [%s]", userId)));
+  }
+
+  public List<User> getAllUsers() {
+    log.info("Getting all users");
+
+    return new ArrayList<>(userRepository.getAllUsers());
   }
 
 }

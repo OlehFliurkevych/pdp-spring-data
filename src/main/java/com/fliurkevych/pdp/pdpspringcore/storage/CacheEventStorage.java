@@ -1,5 +1,11 @@
 package com.fliurkevych.pdp.pdpspringcore.storage;
 
+import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.getPage;
+import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.splitInPages;
+import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.validatePageResult;
+import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByDate;
+import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByText;
+
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheConstants;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
@@ -8,16 +14,11 @@ import org.springframework.cache.CacheManager;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.getPage;
-import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.splitInPages;
-import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.validatePageResult;
-import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByDate;
-import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByText;
 
 public class CacheEventStorage implements EventStorage {
 
@@ -83,5 +84,10 @@ public class CacheEventStorage implements EventStorage {
   @Override
   public boolean delete(Long eventId) {
     return cache.evictIfPresent(eventId);
+  }
+
+  @Override
+  public Collection<Event> getAllEvents() {
+    return CacheUtils.getAllElements(cache, Event.class).values();
   }
 }

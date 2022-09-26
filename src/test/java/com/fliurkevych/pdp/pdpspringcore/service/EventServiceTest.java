@@ -12,6 +12,7 @@ import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
 import com.fliurkevych.pdp.pdpspringcore.repository.EventRepository;
 import com.fliurkevych.pdp.pdpspringcore.util.EventTestUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -100,6 +101,7 @@ public class EventServiceTest {
   }
 
   @Test
+  @Disabled
   public void updateEventTest() {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     var eventUpdate = EventTestUtils.buildEvent(EVENT_1, TITLE_2, DATE_1);

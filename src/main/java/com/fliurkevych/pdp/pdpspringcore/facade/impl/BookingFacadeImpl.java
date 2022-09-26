@@ -114,4 +114,14 @@ public class BookingFacadeImpl implements BookingFacade {
   public boolean cancelTicket(long ticketId) {
     return ticketService.cancelTicket(ticketId);
   }
+
+  @Override
+  public List<User> getAllUsers() {
+    return userService.getAllUsers();
+  }
+
+  @Override
+  public List<Event> getAllEvents() {
+    return eventService.getAllEvents();
+  }
 }
