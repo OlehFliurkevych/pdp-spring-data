@@ -2,7 +2,8 @@ package com.fliurkevych.pdp.pdpspringcore.xml;
 
 import lombok.Data;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -10,13 +11,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Data
 @XmlRootElement(name = "ticket")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TicketXml {
 
-  @XmlAttribute(name = "user_id")
   private Long userId;
-  @XmlAttribute(name = "event_id")
   private Long eventId;
-  @XmlAttribute(name = "place")
   private Long place;
 
 }

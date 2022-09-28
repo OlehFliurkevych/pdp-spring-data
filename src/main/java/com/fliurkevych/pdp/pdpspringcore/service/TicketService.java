@@ -5,13 +5,19 @@ import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validatePla
 import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.repository.TicketRepository;
+import com.fliurkevych.pdp.pdpspringcore.xml.TicketXml;
+import com.fliurkevych.pdp.pdpspringcore.xml.TicketsXml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * @author Oleh Fliurkevych
@@ -75,9 +81,22 @@ public class TicketService {
 
   public void preloadTickets() {
     log.info("Preloading tickets");
-    
-    
-    
+    try {
+      JAXBContext jaxbContext = JAXBContext.newInstance(TicketsXml.class);
+      Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+      TicketsXml tickets = (TicketsXml) jaxbUnmarshaller.unmarshal(
+        new File("src/main/resources/tickets.xml"));
+
+      for (TicketXml ticketXml : tickets.getTickets()) {
+        System.out.println(ticketXml);
+      }
+
+    } catch (JAXBException e) {
+      e.printStackTrace();
+    }
+
+
   }
 
 
