@@ -124,4 +124,9 @@ public class BookingFacadeImpl implements BookingFacade {
   public List<Event> getAllEvents() {
     return eventService.getAllEvents();
   }
+
+  @Override
+  public void preloadTickets() {
+    ticketService.preloadTickets();
+  }
 }

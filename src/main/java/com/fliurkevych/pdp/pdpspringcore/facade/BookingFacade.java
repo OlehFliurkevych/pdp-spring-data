@@ -163,4 +163,10 @@ public interface BookingFacade {
    */
   List<Event> getAllEvents();
 
+  /**
+   * Populate tickets storage based on predefined file
+   *
+   */
+  void preloadTickets();
+
 }

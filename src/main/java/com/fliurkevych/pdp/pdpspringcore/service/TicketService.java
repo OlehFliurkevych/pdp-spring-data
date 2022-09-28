@@ -73,5 +73,12 @@ public class TicketService {
     return ticketRepository.delete(ticketId);
   }
 
+  public void preloadTickets() {
+    log.info("Preloading tickets");
+    
+    
+    
+  }
+
 
 }

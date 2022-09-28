@@ -57,4 +57,10 @@ public class TicketController {
     }
   }
 
+  @GetMapping(path = "/preload")
+  public ResponseEntity<String> preloadTickets() {
+    bookingFacade.preloadTickets();
+    return ResponseEntity.ok("Successfully preloaded tickets");
+  }
+
 }
