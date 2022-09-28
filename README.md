@@ -17,4 +17,3 @@ Implement alternative controller, which will be mapped on header value "accept=a
 Add a method public void preloadTickets() to facade that will load this file from some predefined place (or from a location specified in parameter), unmarshal ticket objects using Spring OXM capabilities and update the storage. The whole batch should be performed in a single transaction, using programmatic transaction management.
 - Implement custom HandlerExceptionResolver, which in case of controller exception just send a simple text response to the client with a brief description of the error.
 - Unit tests, logging, javadocs.
-- Implement integration tests for Booking service controllers using the MockMVC framework.
