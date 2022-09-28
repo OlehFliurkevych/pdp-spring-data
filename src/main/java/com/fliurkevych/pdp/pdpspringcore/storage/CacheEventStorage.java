@@ -9,6 +9,8 @@ import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByText;
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheConstants;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
@@ -19,18 +21,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import javax.annotation.PostConstruct;
 
+@Slf4j
 public class CacheEventStorage implements EventStorage {
 
   private static final Random random = new Random();
 
   private final Cache cache;
 
+  @Autowired
   public CacheEventStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(CacheConstants.EVENTS_CACHE_NAME);
   }
 
-  // TODO: call it before use
+  @PostConstruct
   public void populateCache() {
     if (cache != null) {
       for (int i = 0; i < 500; i++) {
