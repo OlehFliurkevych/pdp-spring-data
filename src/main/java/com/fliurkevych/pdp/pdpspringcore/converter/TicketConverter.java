@@ -15,15 +15,14 @@ public final class TicketConverter {
   public static Ticket toTicket(TicketXml ticketXml) {
     var ticket = new Ticket();
     ticket.setEventId(ticketXml.getEventId());
-    ticket.setEventId(ticketXml.getUserId());
+    ticket.setUserId(ticketXml.getUserId());
     ticket.setPlace(ticketXml.getPlace());
     ticket.setCategory(ticketXml.getCategory());
     return ticket;
   }
 
   public static List<Ticket> toTickets(TicketsXml ticketsXml) {
-    return ticketsXml.getTickets().stream()
-      .map(TicketConverter::toTicket)
+    return ticketsXml.getTickets().stream().map(TicketConverter::toTicket)
       .collect(Collectors.toList());
   }
 
