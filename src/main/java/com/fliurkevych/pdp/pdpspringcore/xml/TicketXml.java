@@ -1,5 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.xml;
 
+import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
 import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -16,6 +17,7 @@ public class TicketXml {
 
   private Long userId;
   private Long eventId;
-  private Long place;
+  private Integer place;
+  private TicketCategory category;
 
 }

@@ -167,6 +167,6 @@ public interface BookingFacade {
    * Populate tickets storage based on predefined file
    *
    */
-  void preloadTickets();
+  boolean preloadTickets();
 
 }

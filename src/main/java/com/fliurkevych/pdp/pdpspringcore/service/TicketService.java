@@ -2,22 +2,20 @@ package com.fliurkevych.pdp.pdpspringcore.service;
 
 import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validatePlaceNumber;
 
+import com.fliurkevych.pdp.pdpspringcore.converter.TicketConverter;
 import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.repository.TicketRepository;
-import com.fliurkevych.pdp.pdpspringcore.xml.TicketXml;
 import com.fliurkevych.pdp.pdpspringcore.xml.TicketsXml;
+import com.fliurkevych.pdp.pdpspringcore.xml.XmlService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 /**
  * @author Oleh Fliurkevych
@@ -27,21 +25,19 @@ import javax.xml.bind.Unmarshaller;
 public class TicketService {
 
   private final Random random;
-  private TicketRepository ticketRepository;
-  private UserService userService;
-  private EventService eventService;
+  private final TicketRepository ticketRepository;
+  private final UserService userService;
+  private final EventService eventService;
+  private final XmlService xmlService;
 
   @Autowired
   public TicketService(TicketRepository ticketRepository, UserService userService,
-    EventService eventService) {
+    EventService eventService, XmlService xmlService) {
     this.random = new Random();
     this.ticketRepository = ticketRepository;
     this.userService = userService;
     this.eventService = eventService;
-  }
-
-  public TicketService() {
-    this.random = new Random();
+    this.xmlService = xmlService;
   }
 
   public Ticket bookTicket(BookTicketDto bookTicketDto) {
@@ -79,25 +75,19 @@ public class TicketService {
     return ticketRepository.delete(ticketId);
   }
 
-  public void preloadTickets() {
+  public boolean preloadTickets() {
     log.info("Preloading tickets");
-    try {
-      JAXBContext jaxbContext = JAXBContext.newInstance(TicketsXml.class);
-      Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+    var ticketsXml = xmlService.unmarshal("src/main/resources/tickets.xml", TicketsXml.class);
 
-      TicketsXml tickets = (TicketsXml) jaxbUnmarshaller.unmarshal(
-        new File("src/main/resources/tickets.xml"));
+    var tickets = TicketConverter.toTickets(ticketsXml);
 
-      for (TicketXml ticketXml : tickets.getTickets()) {
-        System.out.println(ticketXml);
-      }
-
-    } catch (JAXBException e) {
-      e.printStackTrace();
+    var savedTickets = new ArrayList<>();
+    for (int i = 0; i < tickets.size(); i++) {
+      var ticket = tickets.get(i);
+      ticket.setId((long) i);
+      savedTickets.add(ticketRepository.save(ticket));
     }
-
-
+    return savedTickets.size() == tickets.size();
   }
-
 
 }

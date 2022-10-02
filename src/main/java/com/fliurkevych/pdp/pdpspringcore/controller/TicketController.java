@@ -58,9 +58,11 @@ public class TicketController {
   }
 
   @GetMapping(path = "/preload")
-  public ResponseEntity<String> preloadTickets() {
-    bookingFacade.preloadTickets();
-    return ResponseEntity.ok("Successfully preloaded tickets");
+  public ResponseEntity preloadTickets() {
+    if (bookingFacade.preloadTickets()) {
+      return ResponseEntity.ok("Successfully preloaded tickets");
+    }
+    return ResponseEntity.badRequest().body("Not all tickets preloaded");
   }
 
 }

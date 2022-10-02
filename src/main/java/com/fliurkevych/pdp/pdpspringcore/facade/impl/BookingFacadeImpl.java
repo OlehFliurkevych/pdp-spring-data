@@ -126,7 +126,7 @@ public class BookingFacadeImpl implements BookingFacade {
   }
 
   @Override
-  public void preloadTickets() {
-    ticketService.preloadTickets();
+  public boolean preloadTickets() {
+    return ticketService.preloadTickets();
   }
 }
