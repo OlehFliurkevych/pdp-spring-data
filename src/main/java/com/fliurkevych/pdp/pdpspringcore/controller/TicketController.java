@@ -4,8 +4,11 @@ import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.facade.BookingFacade;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +66,21 @@ public class TicketController {
       return ResponseEntity.ok("Successfully preloaded tickets");
     }
     return ResponseEntity.badRequest().body("Not all tickets preloaded");
+  }
+
+  @GetMapping(path = "/search/user/{userId}/report", produces = MediaType.APPLICATION_PDF_VALUE)
+  public ResponseEntity<InputStreamResource> generatePdfBookedTicketsByUserId(
+    @PathVariable Long userId,
+    @PageableDefault Pageable pageable) {
+    var bis = bookingFacade.generatePdfTicketReportForUser(userId, pageable);
+    var headers = new HttpHeaders();
+    headers.add("Content-Disposition", "inline; filename=tickets.pdf");
+
+    return ResponseEntity
+      .ok()
+      .headers(headers)
+      .contentType(MediaType.APPLICATION_PDF)
+      .body(new InputStreamResource(bis));
   }
 
 }

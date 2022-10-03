@@ -6,6 +6,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.model.User;
 import org.springframework.data.domain.Pageable;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -165,8 +166,14 @@ public interface BookingFacade {
 
   /**
    * Populate tickets storage based on predefined file
-   *
    */
   boolean preloadTickets();
+
+  /**
+   * Generate pdf report booked tickets for user
+   *
+   * @return pdf report
+   */
+  ByteArrayInputStream generatePdfTicketReportForUser(Long userId, Pageable pageable);
 
 }

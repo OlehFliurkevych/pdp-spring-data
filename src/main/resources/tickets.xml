@@ -31,6 +31,12 @@
     <category>BAR</category>
   </ticket>
   <ticket>
+    <userId>37</userId>
+    <eventId>45</eventId>
+    <place>50</place>
+    <category>STANDARD</category>
+  </ticket>
+  <ticket>
     <userId>32</userId>
     <eventId>98</eventId>
     <place>47</place>

@@ -8,11 +8,13 @@ import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.service.EventService;
 import com.fliurkevych.pdp.pdpspringcore.service.TicketService;
 import com.fliurkevych.pdp.pdpspringcore.service.UserService;
+import com.fliurkevych.pdp.pdpspringcore.util.PdfUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -128,5 +130,11 @@ public class BookingFacadeImpl implements BookingFacade {
   @Override
   public boolean preloadTickets() {
     return ticketService.preloadTickets();
+  }
+
+  @Override
+  public ByteArrayInputStream generatePdfTicketReportForUser(Long userId, Pageable pageable) {
+    var tickets = ticketService.getBookedTicketsByUserId(userId, pageable);
+    return PdfUtils.generateTicketsReport(tickets);
   }
 }

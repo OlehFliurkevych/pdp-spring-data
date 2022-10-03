@@ -14,15 +14,12 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Oleh Fliurkevych
  */
 @Slf4j
 public class CacheTicketStorage implements TicketStorage {
-
-  private static final Random random = new Random();
 
   private final Cache cache;
 
@@ -33,7 +30,9 @@ public class CacheTicketStorage implements TicketStorage {
 
   @Override
   public Ticket save(Ticket ticket) {
-    return (Ticket) cache.putIfAbsent(ticket.getId(), ticket).get();
+    cache.put(ticket.getId(), ticket);
+    return CacheUtils.getElementByKey(cache, ticket.getId(), Ticket.class)
+      .orElse(null);
   }
 
   @Override
