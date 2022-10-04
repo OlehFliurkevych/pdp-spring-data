@@ -13,8 +13,8 @@ ModelAndView à Resolver à ThymeleafTemplate à Html page in the browser.
 - For the following facade method:
 List getBookedTickets(User user, int pageSize, int pageNum);
 Implement alternative controller, which will be mapped on header value "accept=application/pdf" and return PDF version of booked tickets list.
-Example of PDF report:
-![img.png](img.png)
+<br />Example of PDF report:
+<br />![img.png](img.png)
 - Implement batch creation of ticket bookings from XML file. Source file example:
 Add a method public void preloadTickets() to facade that will load this file from some predefined place (or from a location specified in parameter), unmarshal ticket objects using Spring OXM capabilities and update the storage. The whole batch should be performed in a single transaction, using programmatic transaction management.
 - Implement custom HandlerExceptionResolver, which in case of controller exception just send a simple text response to the client with a brief description of the error.
