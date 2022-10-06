@@ -13,6 +13,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,11 @@ public class TicketService {
   public boolean preloadTickets() {
     log.info("Preloading tickets");
 
-    var ticketsXml = xmlService.unmarshal(getClass().getClassLoader().getResource("tickets.xml").getPath(), TicketsXml.class);
+    // TODO: You need to use resource-based file location here
+    final var ticketsXmlFilePath =
+      Objects.requireNonNull(getClass().getClassLoader().getResource("tickets.xml")).getPath();
+
+    var ticketsXml = xmlService.unmarshal(ticketsXmlFilePath, TicketsXml.class);
 
     final var tickets = ticketConverter.convert(ticketsXml);
 
