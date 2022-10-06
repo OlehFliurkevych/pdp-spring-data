@@ -1,8 +1,5 @@
 package com.fliurkevych.pdp.pdpspringcore.service;
 
-import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validatePlaceNumber;
-
-import com.fliurkevych.pdp.pdpspringcore.converter.TicketConverter;
 import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.repository.TicketRepository;
@@ -10,12 +7,17 @@ import com.fliurkevych.pdp.pdpspringcore.xml.TicketsXml;
 import com.fliurkevych.pdp.pdpspringcore.xml.XmlService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+
+import static com.fliurkevych.pdp.pdpspringcore.util.CollectionUtils.zipWithIndex;
+import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validatePlaceNumber;
 
 /**
  * @author Oleh Fliurkevych
@@ -29,10 +31,15 @@ public class TicketService {
   private final UserService userService;
   private final EventService eventService;
   private final XmlService xmlService;
+  private final Converter<TicketsXml, List<Ticket>> ticketConverter;
 
   @Autowired
-  public TicketService(TicketRepository ticketRepository, UserService userService,
-    EventService eventService, XmlService xmlService) {
+  public TicketService(TicketRepository ticketRepository,
+                       UserService userService,
+                       EventService eventService,
+                       XmlService xmlService,
+                       Converter<TicketsXml, List<Ticket>> ticketConverter) {
+    this.ticketConverter = ticketConverter;
     this.random = new Random();
     this.ticketRepository = ticketRepository;
     this.userService = userService;
@@ -77,17 +84,24 @@ public class TicketService {
 
   public boolean preloadTickets() {
     log.info("Preloading tickets");
-    var ticketsXml = xmlService.unmarshal("src/main/resources/tickets.xml", TicketsXml.class);
 
-    var tickets = TicketConverter.toTickets(ticketsXml);
+    var ticketsXml = xmlService.unmarshal(getClass().getClassLoader().getResource("tickets.xml").getPath(), TicketsXml.class);
 
-    var savedTickets = new ArrayList<>();
-    for (int i = 0; i < tickets.size(); i++) {
-      var ticket = tickets.get(i);
-      ticket.setId((long) i);
-      savedTickets.add(ticketRepository.save(ticket));
-    }
-    return savedTickets.size() == tickets.size();
+    final var tickets = ticketConverter.convert(ticketsXml);
+
+    var savedTickets = zipWithIndex(tickets).stream()
+      .map(TicketService::setId)
+      .map(ticketRepository::save)
+      .collect(Collectors.toList());
+
+    return  savedTickets.size() == tickets.size();
   }
 
+  private static Ticket setId(final Pair<Ticket, Integer> ticketWithIndex) {
+    var ticket = ticketWithIndex.getFirst();
+    var index = ticketWithIndex.getSecond();
+
+    ticket.setId(Long.valueOf(index));
+    return ticket;
+  }
 }

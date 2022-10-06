@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
  */
 public final class PageUtils {
 
+  // TODO: check out partition(final List<T> source, final int chunkSize) from CollectionUtils
+  // there is no need in atomics and stream API.
   public static <T> List<List<T>> splitInPages(Collection<T> filteredEvents, int pageSize) {
     final AtomicInteger counter = new AtomicInteger();
     return new ArrayList<>(filteredEvents.stream()

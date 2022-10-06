@@ -1,20 +1,21 @@
 package com.fliurkevych.pdp.pdpspringcore.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-
 import com.fliurkevych.pdp.pdpspringcore.converter.TicketConverter;
+import com.fliurkevych.pdp.pdpspringcore.converter.TicketsConverter;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.repository.TicketRepository;
 import com.fliurkevych.pdp.pdpspringcore.util.TicketTestUtils;
 import com.fliurkevych.pdp.pdpspringcore.xml.XmlService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 /**
  * @author Oleh Fliurkevych
@@ -26,13 +27,27 @@ public class TicketServiceTest {
   private TicketRepository ticketRepository;
   @Mock
   private XmlService xmlService;
-  @InjectMocks
+
+  private TicketsConverter ticketConverter;
+
   private TicketService ticketService;
+
+  @BeforeEach
+  void setUp() {
+    this.ticketConverter = new TicketsConverter(new TicketConverter());
+
+    this.ticketService = new TicketService(
+      ticketRepository,
+      null,
+      null,
+      xmlService,
+      ticketConverter);
+  }
 
   @Test
   public void preloadTicketsTest() {
     var ticketsXml = TicketTestUtils.buildTicketsXml(3);
-    var tickets = TicketConverter.toTickets(ticketsXml);
+    var tickets = ticketConverter.convert(ticketsXml);
     var t1 = tickets.get(0);
     var t2 = tickets.get(1);
     var t3 = tickets.get(2);
