@@ -21,6 +21,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
   public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
     Object handler, Exception ex) {
     try {
+      // TODO: likely to replace this with switch expression in java 18
       if (ex instanceof NotFoundException) {
         return handleNotFoundException(ex);
       } else if (ex instanceof NotSupportedException) {

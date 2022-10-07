@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -30,6 +31,8 @@ public class CacheEventStorage implements EventStorage {
 
   private final Cache cache;
 
+  // TODO: since you are creating this event storage via the configuration, no need to declare constructor as autowired
+  // this annotation will be skipped, since this class is not marked as @Component or @Service, etc...
   @Autowired
   public CacheEventStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(CacheConstants.EVENTS_CACHE_NAME);

@@ -10,9 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Oleh Fliurkevych
@@ -30,6 +28,7 @@ public class UserService {
 
   public User getUserById(Long userId) {
     log.info("Getting user by id: {}", userId);
+    // TODO: consutructor of the NotFoundException can be customized, to omit unnecessary String.format each time
     return userRepository.getUserById(userId).orElseThrow(() -> new NotFoundException(
       String.format("Can not found element with key: [%s]", userId)));
   }
@@ -48,6 +47,7 @@ public class UserService {
   public User createUser(User user) {
     log.info("Creating new user with name [{}] and email [{}]", user.getName(), user.getEmail());
 
+    // TODO: I'd suggest to add a sort of exists(user.getId()) method to the repository
     if (userRepository.getUserById(user.getId()).isEmpty()) {
       return userRepository.save(user);
     }

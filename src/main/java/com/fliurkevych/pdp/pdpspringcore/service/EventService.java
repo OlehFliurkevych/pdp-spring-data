@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Oleh Fliurkevych
@@ -51,6 +50,7 @@ public class EventService {
     log.info("Creating new event with title [{}], for date [{}]",
       event.getTitle(), event.getDate());
 
+    // TODO: I'd suggest to add a sort of exists(event.getId()) method to the repository
     if (eventRepository.getEventById(event.getId()).isEmpty()) {
       return eventRepository.save(event);
     } else {
