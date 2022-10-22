@@ -37,13 +37,12 @@ public class EventService {
 
   public List<Event> getEventsByTitle(String title, Pageable pageable) {
     log.info("Getting events by title: {}", title);
-    return eventRepository
-      .getEventsByTitle(title, pageable.getPageSize(), pageable.getPageNumber());
+    return eventRepository.getEventsByTitle(title, pageable);
   }
 
   public List<Event> getEventsByDate(Date date, Pageable pageable) {
     log.info("Getting events by date: {}", date);
-    return eventRepository.getEventsForDay(date, pageable.getPageSize(), pageable.getPageNumber());
+    return eventRepository.getEventsForDay(date, pageable);
   }
 
   public Event createEvent(Event event) {

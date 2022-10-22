@@ -1,4 +1,4 @@
-package com.fliurkevych.pdp.pdpspringcore.storage;
+package com.fliurkevych.pdp.pdpspringcore.storage.cache;
 
 import static com.fliurkevych.pdp.pdpspringcore.util.CacheConstants.USERS_CACHE_NAME;
 import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.getPage;
@@ -7,11 +7,13 @@ import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.validatePageResul
 import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByText;
 
 import com.fliurkevych.pdp.pdpspringcore.model.User;
+import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
@@ -59,7 +61,9 @@ public class CacheUserStorage implements UserStorage {
   }
 
   @Override
-  public List<User> getUsersByName(String name, int pageSize, int pageNum) {
+  public List<User> getUsersByName(String name, Pageable pageable) {
+    final var pageNum = pageable.getPageNumber();
+    final var pageSize = pageable.getPageSize();
     var allUsers = CacheUtils.getAllElements(cache, User.class);
 
     var filteredEvent = searchByText(allUsers.values(), name, User::getName);

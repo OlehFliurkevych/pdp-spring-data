@@ -60,7 +60,8 @@ public class EventServiceTest {
     var event1 = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     var event2 = EventTestUtils.buildEvent(EVENT_2, TITLE_2, DATE_1);
 
-    when(eventRepository.getEventsByTitle("title 11", 10, 1)).thenReturn(List.of(event1, event2));
+    when(eventRepository.getEventsByTitle("title 11", PAGEABLE)).thenReturn(
+      List.of(event1, event2));
 
     var result = eventService.getEventsByTitle("title 11", PAGEABLE);
     Assertions.assertNotNull(result);
@@ -72,7 +73,7 @@ public class EventServiceTest {
     var event1 = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     var event2 = EventTestUtils.buildEvent(EVENT_2, TITLE_2, DATE_1);
 
-    when(eventRepository.getEventsForDay(DATE_1, 10, 1)).thenReturn(
+    when(eventRepository.getEventsForDay(DATE_1, PAGEABLE)).thenReturn(
       List.of(event1, event2));
 
     var result = eventService.getEventsByDate(DATE_1, PAGEABLE);

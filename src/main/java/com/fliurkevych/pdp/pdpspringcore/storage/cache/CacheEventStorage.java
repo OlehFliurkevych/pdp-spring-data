@@ -1,4 +1,4 @@
-package com.fliurkevych.pdp.pdpspringcore.storage;
+package com.fliurkevych.pdp.pdpspringcore.storage.cache;
 
 import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.getPage;
 import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.splitInPages;
@@ -7,13 +7,14 @@ import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByDate;
 import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByText;
 
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
+import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheConstants;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -56,7 +57,9 @@ public class CacheEventStorage implements EventStorage {
   }
 
   @Override
-  public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
+  public List<Event> getEventsByTitle(String title, Pageable pageable) {
+    final var pageNum = pageable.getPageNumber();
+    final var pageSize = pageable.getPageSize();
     var allEvents = CacheUtils.getAllElements(cache, Event.class);
 
     var filteredEvent = searchByText(allEvents.values(), title, Event::getTitle);
@@ -67,7 +70,9 @@ public class CacheEventStorage implements EventStorage {
   }
 
   @Override
-  public List<Event> getEventsForDay(Date day, int pageSize, int pageNum) {
+  public List<Event> getEventsForDay(Date day, Pageable pageable) {
+    final var pageNum = pageable.getPageNumber();
+    final var pageSize = pageable.getPageSize();
     var allEvents = CacheUtils.getAllElements(cache, Event.class);
 
     var filteredEvents = searchByDate(allEvents.values(), day, Event::getDate);

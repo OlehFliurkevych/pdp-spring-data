@@ -10,10 +10,10 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.fliurkevych.pdp</groupId>
-  <artifactId>pdp-spring-core</artifactId>
+  <artifactId>pdp-spring-data</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>pdp-spring-core</name>
-  <description>Pdp project for Spring Core module</description>
+  <name>pdp-spring-data</name>
+  <description>Pdp project for Spring Data Access module</description>
   <properties>
     <java.version>11</java.version>
     <spring.version>2.7.3</spring.version>
@@ -57,6 +57,12 @@
       <artifactId>itext</artifactId>
       <version>4.2.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.1.1.Final</version>
+    </dependency>
+
 
 
   </dependencies>

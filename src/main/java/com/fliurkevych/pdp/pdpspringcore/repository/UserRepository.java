@@ -4,6 +4,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -32,8 +33,8 @@ public class UserRepository {
     return userStorage.getUserByEmail(email);
   }
 
-  public List<User> getUsersByName(String name, int pageSize, int pageNum) {
-    return userStorage.getUsersByName(name, pageSize, pageNum);
+  public List<User> getUsersByName(String name, Pageable pageable) {
+    return userStorage.getUsersByName(name, pageable);
   }
 
   public User save(User user) {

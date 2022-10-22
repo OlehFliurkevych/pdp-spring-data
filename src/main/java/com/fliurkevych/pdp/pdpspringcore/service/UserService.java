@@ -41,7 +41,7 @@ public class UserService {
 
   public List<User> getUsersByName(String name, Pageable pageable) {
     log.info("Getting users by name: {}", name);
-    return userRepository.getUsersByName(name, pageable.getPageSize(), pageable.getPageNumber());
+    return userRepository.getUsersByName(name, pageable);
   }
 
   public User createUser(User user) {

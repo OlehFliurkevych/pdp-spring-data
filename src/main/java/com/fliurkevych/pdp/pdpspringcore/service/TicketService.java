@@ -1,5 +1,8 @@
 package com.fliurkevych.pdp.pdpspringcore.service;
 
+import static com.fliurkevych.pdp.pdpspringcore.util.CollectionUtils.zipWithIndex;
+import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validatePlaceNumber;
+
 import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.repository.TicketRepository;
@@ -17,9 +20,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static com.fliurkevych.pdp.pdpspringcore.util.CollectionUtils.zipWithIndex;
-import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validatePlaceNumber;
-
 /**
  * @author Oleh Fliurkevych
  */
@@ -36,10 +36,10 @@ public class TicketService {
 
   @Autowired
   public TicketService(TicketRepository ticketRepository,
-                       UserService userService,
-                       EventService eventService,
-                       XmlService xmlService,
-                       Converter<TicketsXml, List<Ticket>> ticketConverter) {
+    UserService userService,
+    EventService eventService,
+    XmlService xmlService,
+    Converter<TicketsXml, List<Ticket>> ticketConverter) {
     this.ticketConverter = ticketConverter;
     this.random = new Random();
     this.ticketRepository = ticketRepository;
@@ -67,15 +67,13 @@ public class TicketService {
   public List<Ticket> getBookedTicketsByUserId(Long userId, Pageable pageable) {
     var user = userService.getUserById(userId);
     log.info("Getting all booked tickets for user with name [{}]", user.getName());
-    return ticketRepository.getBookedTicketsForUser(userId, pageable.getPageSize(),
-      pageable.getPageNumber());
+    return ticketRepository.getBookedTicketsForUser(userId, pageable);
   }
 
   public List<Ticket> getBookedTicketsByEventId(Long eventId, Pageable pageable) {
     var event = eventService.getEventById(eventId);
     log.info("Getting all booked tickets for event with title [{}]", event.getTitle());
-    return ticketRepository.getBookedTicketsForEvent(eventId, pageable.getPageSize(),
-      pageable.getPageNumber());
+    return ticketRepository.getBookedTicketsForEvent(eventId, pageable);
   }
 
   public boolean cancelTicket(long ticketId) {
@@ -99,7 +97,7 @@ public class TicketService {
       .map(ticketRepository::save)
       .collect(Collectors.toList());
 
-    return  savedTickets.size() == tickets.size();
+    return savedTickets.size() == tickets.size();
   }
 
   private static Ticket setId(final Pair<Ticket, Integer> ticketWithIndex) {

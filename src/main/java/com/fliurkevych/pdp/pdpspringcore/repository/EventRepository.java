@@ -4,6 +4,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -29,12 +30,12 @@ public class EventRepository {
     return storage.getEventById(eventId);
   }
 
-  public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
-    return storage.getEventsByTitle(title, pageSize, pageNum);
+  public List<Event> getEventsByTitle(String title, Pageable pageable) {
+    return storage.getEventsByTitle(title, pageable);
   }
 
-  public List<Event> getEventsForDay(Date day, int pageSize, int pageNum) {
-    return storage.getEventsForDay(day, pageSize, pageNum);
+  public List<Event> getEventsForDay(Date day, Pageable pageable) {
+    return storage.getEventsForDay(day, pageable);
   }
 
   public Event save(Event event) {

@@ -1,6 +1,7 @@
 package com.fliurkevych.pdp.pdpspringcore.storage;
 
 import com.fliurkevych.pdp.pdpspringcore.model.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ public interface UserStorage {
 
   Optional<User> getUserByEmail(String email);
 
-  List<User> getUsersByName(String name, int pageSize, int pageNum);
+  List<User> getUsersByName(String name, Pageable pageable);
 
   User save(User user);
 

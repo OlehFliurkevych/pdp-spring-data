@@ -1,4 +1,4 @@
-package com.fliurkevych.pdp.pdpspringcore.storage;
+package com.fliurkevych.pdp.pdpspringcore.storage.cache;
 
 import static com.fliurkevych.pdp.pdpspringcore.util.CacheConstants.TICKETS_CACHE_NAME;
 import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.getPage;
@@ -7,11 +7,13 @@ import static com.fliurkevych.pdp.pdpspringcore.util.PageUtils.validatePageResul
 import static com.fliurkevych.pdp.pdpspringcore.util.SearchUtils.searchByLong;
 
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
+import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -36,7 +38,9 @@ public class CacheTicketStorage implements TicketStorage {
   }
 
   @Override
-  public List<Ticket> getBookedTicketsForUser(Long userId, int pageSize, int pageNum) {
+  public List<Ticket> getBookedTicketsForUser(Long userId, Pageable pageable) {
+    final var pageSize = pageable.getPageSize();
+    final var pageNum = pageable.getPageNumber();
     var allTickets = CacheUtils.getAllElements(cache, Ticket.class);
 
     var filteredEvents = searchByLong(allTickets.values(), userId, Ticket::getUserId);
@@ -47,7 +51,9 @@ public class CacheTicketStorage implements TicketStorage {
   }
 
   @Override
-  public List<Ticket> getBookedTicketsForEvent(Long eventId, int pageSize, int pageNum) {
+  public List<Ticket> getBookedTicketsForEvent(Long eventId, Pageable pageable) {
+    final var pageNum = pageable.getPageNumber();
+    final var pageSize = pageable.getPageSize();
     var allTickets = CacheUtils.getAllElements(cache, Ticket.class);
 
     var filteredEvents = searchByLong(allTickets.values(), eventId, Ticket::getEventId);

@@ -78,7 +78,7 @@ public class UserServiceTest {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
     var user2 = UserTestUtils.buildUser(USER_ID_2, NAME_2, EMAIL_2);
 
-    when(userRepository.getUsersByName("name 11", 10, 1)).thenReturn(List.of(user1, user2));
+    when(userRepository.getUsersByName("name 11", PAGEABLE)).thenReturn(List.of(user1, user2));
 
     var result = userService.getUsersByName("name 11", PAGEABLE);
     Assertions.assertNotNull(result);
