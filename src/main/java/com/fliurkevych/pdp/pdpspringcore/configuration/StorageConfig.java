@@ -1,5 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.configuration;
 
+import com.fliurkevych.pdp.pdpspringcore.enums.StorageType;
 import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
@@ -12,7 +13,7 @@ import com.fliurkevych.pdp.pdpspringcore.storage.db.UserRepository;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbEventStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbTicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbUserStorage;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,33 +22,38 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class StorageConfig {
 
-//  @Bean
-//  public EventStorage eventStorage(CacheManager manager) {
-//    return new CacheEventStorage(manager);
-//  }
-//
-//  @Bean
-//  public UserStorage userStorage(CacheManager manager) {
-//    return new CacheUserStorage(manager);
-//  }
-//
-//  @Bean
-//  public TicketStorage ticketStorage(CacheManager manager) {
-//    return new CacheTicketStorage(manager);
-//  }
+  @Value("${storage.type:DB}")
+  private StorageType STORAGE_TYPE;
+
+  private CacheManager cacheManager;
 
   @Bean
   public EventStorage eventStorage(EventRepository eventRepository) {
-    return new DbEventStorage(eventRepository);
+    switch (STORAGE_TYPE) {
+      case CACHE:
+        return new CacheEventStorage(cacheManager);
+      default:
+        return new DbEventStorage(eventRepository);
+    }
   }
 
   @Bean
   public UserStorage userStorage(UserRepository userRepository) {
-    return new DbUserStorage(userRepository);
+    switch (STORAGE_TYPE) {
+      case CACHE:
+        return new CacheUserStorage(cacheManager);
+      default:
+        return new DbUserStorage(userRepository);
+    }
   }
 
   @Bean
   public TicketStorage ticketStorage(TicketRepository ticketRepository) {
-    return new DbTicketStorage(ticketRepository);
+    switch (STORAGE_TYPE) {
+      case CACHE:
+        return new CacheTicketStorage(cacheManager);
+      default:
+        return new DbTicketStorage(ticketRepository);
+    }
   }
 }
