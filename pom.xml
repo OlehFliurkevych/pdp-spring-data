@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.3</version>
+    <version>2.3.4.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.fliurkevych.pdp</groupId>
@@ -16,7 +16,7 @@
   <description>Pdp project for Spring Data Access module</description>
   <properties>
     <java.version>11</java.version>
-    <spring.version>2.7.3</spring.version>
+    <spring.version>2.3.4.RELEASE</spring.version>
   </properties>
   <dependencies>
     <dependency>
@@ -60,7 +60,14 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>6.1.1.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
 

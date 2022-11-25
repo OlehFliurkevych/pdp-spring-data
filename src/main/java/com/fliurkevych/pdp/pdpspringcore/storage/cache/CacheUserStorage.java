@@ -10,7 +10,6 @@ import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,6 @@ public class CacheUserStorage implements UserStorage {
 
   private final Cache cache;
 
-  @Autowired
   public CacheUserStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(USERS_CACHE_NAME);
   }

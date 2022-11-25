@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
 import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
-import com.fliurkevych.pdp.pdpspringcore.repository.EventRepository;
+import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.EventTestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -33,7 +33,7 @@ public class EventServiceTest {
   private static final Pageable PAGEABLE = PageRequest.of(1, 10);
 
   @Mock
-  private EventRepository eventRepository;
+  private EventStorage eventStorage;
   @InjectMocks
   private EventService eventService;
 
@@ -41,7 +41,7 @@ public class EventServiceTest {
   public void getEventById() {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
 
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.of(event));
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.of(event));
 
     var result = eventService.getEventById(EVENT_1);
     Assertions.assertNotNull(result);
@@ -50,7 +50,7 @@ public class EventServiceTest {
 
   @Test
   public void getEventByIdShouldThrowNotFoundExceptionTest() {
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.empty());
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> eventService.getEventById(EVENT_1));
   }
@@ -60,7 +60,7 @@ public class EventServiceTest {
     var event1 = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     var event2 = EventTestUtils.buildEvent(EVENT_2, TITLE_2, DATE_1);
 
-    when(eventRepository.getEventsByTitle("title 11", PAGEABLE)).thenReturn(
+    when(eventStorage.getEventsByTitle("title 11", PAGEABLE)).thenReturn(
       List.of(event1, event2));
 
     var result = eventService.getEventsByTitle("title 11", PAGEABLE);
@@ -73,7 +73,7 @@ public class EventServiceTest {
     var event1 = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     var event2 = EventTestUtils.buildEvent(EVENT_2, TITLE_2, DATE_1);
 
-    when(eventRepository.getEventsForDay(DATE_1, PAGEABLE)).thenReturn(
+    when(eventStorage.getEventsForDay(DATE_1, PAGEABLE)).thenReturn(
       List.of(event1, event2));
 
     var result = eventService.getEventsByDate(DATE_1, PAGEABLE);
@@ -85,8 +85,8 @@ public class EventServiceTest {
   public void createUserTest() {
     var event1 = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
 
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.empty());
-    when(eventRepository.save(event1)).thenReturn(event1);
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.empty());
+    when(eventStorage.save(event1)).thenReturn(event1);
 
     var result = eventService.createEvent(event1);
     Assertions.assertNotNull(result);
@@ -96,7 +96,7 @@ public class EventServiceTest {
   @Test
   public void createEventShouldThrowValidationTest() {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.of(event));
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.of(event));
 
     Assertions.assertThrows(ValidationException.class, () -> eventService.createEvent(event));
   }
@@ -107,8 +107,8 @@ public class EventServiceTest {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     var eventUpdate = EventTestUtils.buildEvent(EVENT_1, TITLE_2, DATE_1);
 
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.of(event));
-    when(eventRepository.update(eventUpdate)).thenReturn(eventUpdate);
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.of(event));
+    when(eventStorage.update(eventUpdate)).thenReturn(eventUpdate);
 
     var result = eventService.updateEvent(eventUpdate);
     Assertions.assertNotNull(result);
@@ -119,7 +119,7 @@ public class EventServiceTest {
   @Test
   public void updateEventShouldThrowNotFoundTest() {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.empty());
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> eventService.updateEvent(event));
   }
@@ -128,8 +128,8 @@ public class EventServiceTest {
   public void deleteEventTest() {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
 
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.of(event));
-    when(eventRepository.delete(EVENT_1)).thenReturn(true);
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.of(event));
+    when(eventStorage.delete(EVENT_1)).thenReturn(true);
 
     var result = eventService.deleteEvent(EVENT_1);
     Assertions.assertTrue(result);
@@ -137,7 +137,7 @@ public class EventServiceTest {
 
   @Test
   public void deleteEventShouldThrowNotFoundTest() {
-    when(eventRepository.getEventById(EVENT_1)).thenReturn(Optional.empty());
+    when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> eventService.deleteEvent(EVENT_1));
   }

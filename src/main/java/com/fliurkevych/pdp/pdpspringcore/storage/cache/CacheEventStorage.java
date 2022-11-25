@@ -16,6 +16,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
@@ -34,7 +35,6 @@ public class CacheEventStorage implements EventStorage {
 
   // TODO: since you are creating this event storage via the configuration, no need to declare constructor as autowired
   // this annotation will be skipped, since this class is not marked as @Component or @Service, etc...
-  @Autowired
   public CacheEventStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(CacheConstants.EVENTS_CACHE_NAME);
   }
@@ -44,7 +44,8 @@ public class CacheEventStorage implements EventStorage {
     if (cache != null) {
       for (int i = 0; i < 500; i++) {
         var event = new Event((long) i, "Event title #" + i,
-          Date.from(Instant.now().plus(Duration.ofDays(random.nextInt(15) * 365L))));
+          Date.from(Instant.now().plus(Duration.ofDays(random.nextInt(15) * 365L))),
+          BigDecimal.valueOf(random.nextInt(100)));
         var eventId = event.getId();
         cache.put(eventId, event);
       }

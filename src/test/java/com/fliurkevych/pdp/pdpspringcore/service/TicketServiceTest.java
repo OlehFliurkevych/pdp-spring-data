@@ -1,9 +1,12 @@
 package com.fliurkevych.pdp.pdpspringcore.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 import com.fliurkevych.pdp.pdpspringcore.converter.TicketConverter;
 import com.fliurkevych.pdp.pdpspringcore.converter.TicketsConverter;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
-import com.fliurkevych.pdp.pdpspringcore.repository.TicketRepository;
+import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.TicketTestUtils;
 import com.fliurkevych.pdp.pdpspringcore.xml.XmlService;
 import org.junit.jupiter.api.Assertions;
@@ -14,9 +17,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-
 /**
  * @author Oleh Fliurkevych
  */
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 public class TicketServiceTest {
 
   @Mock
-  private TicketRepository ticketRepository;
+  private TicketStorage ticketStorage;
   @Mock
   private XmlService xmlService;
 
@@ -37,7 +37,7 @@ public class TicketServiceTest {
     this.ticketConverter = new TicketsConverter(new TicketConverter());
 
     this.ticketService = new TicketService(
-      ticketRepository,
+      ticketStorage,
       null,
       null,
       xmlService,
@@ -57,14 +57,14 @@ public class TicketServiceTest {
 
     Mockito.when(xmlService.unmarshal(anyString(), any()))
       .thenReturn(ticketsXml);
-    Mockito.when(ticketRepository.save(t1)).thenReturn(t1);
-    Mockito.when(ticketRepository.save(t2)).thenReturn(t2);
-    Mockito.when(ticketRepository.save(t3)).thenReturn(t3);
+    Mockito.when(ticketStorage.save(t1)).thenReturn(t1);
+    Mockito.when(ticketStorage.save(t2)).thenReturn(t2);
+    Mockito.when(ticketStorage.save(t3)).thenReturn(t3);
 
     var success = ticketService.preloadTickets();
 
     Mockito.verify(xmlService).unmarshal(anyString(), any());
-    Mockito.verify(ticketRepository, Mockito.times(3)).save(any(Ticket.class));
+    Mockito.verify(ticketStorage, Mockito.times(3)).save(any(Ticket.class));
 
     Assertions.assertTrue(success);
   }

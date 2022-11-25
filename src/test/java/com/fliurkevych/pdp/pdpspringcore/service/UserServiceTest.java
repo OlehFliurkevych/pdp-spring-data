@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
 import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
-import com.fliurkevych.pdp.pdpspringcore.repository.UserRepository;
+import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.UserTestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class UserServiceTest {
   public static final Pageable PAGEABLE = PageRequest.of(1, 10);
 
   @Mock
-  private UserRepository userRepository;
+  private UserStorage userStorage;
   @InjectMocks
   private UserService userService;
 
@@ -41,7 +41,7 @@ public class UserServiceTest {
   public void getUserByIdTest() {
     var user = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
 
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.of(user));
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user));
 
     var result = userService.getUserById(USER_ID_1);
     Assertions.assertNotNull(result);
@@ -50,7 +50,7 @@ public class UserServiceTest {
 
   @Test
   public void getUserByIdShouldThrowNotFoundExceptionTest() {
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.empty());
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> userService.getUserById(USER_ID_1));
   }
@@ -59,7 +59,7 @@ public class UserServiceTest {
   public void getUserByEmailTest() {
     var user = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
 
-    when(userRepository.getUserByEmail(EMAIL_1)).thenReturn(Optional.of(user));
+    when(userStorage.getUserByEmail(EMAIL_1)).thenReturn(Optional.of(user));
 
     var result = userService.getUserByEmail(EMAIL_1);
     Assertions.assertNotNull(result);
@@ -68,7 +68,7 @@ public class UserServiceTest {
 
   @Test
   public void getUserByEmailShouldThrowNotFoundExceptionTest() {
-    when(userRepository.getUserByEmail(EMAIL_1)).thenReturn(Optional.empty());
+    when(userStorage.getUserByEmail(EMAIL_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> userService.getUserByEmail(EMAIL_1));
   }
@@ -78,7 +78,7 @@ public class UserServiceTest {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
     var user2 = UserTestUtils.buildUser(USER_ID_2, NAME_2, EMAIL_2);
 
-    when(userRepository.getUsersByName("name 11", PAGEABLE)).thenReturn(List.of(user1, user2));
+    when(userStorage.getUsersByName("name 11", PAGEABLE)).thenReturn(List.of(user1, user2));
 
     var result = userService.getUsersByName("name 11", PAGEABLE);
     Assertions.assertNotNull(result);
@@ -89,8 +89,8 @@ public class UserServiceTest {
   public void createUserTest() {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
 
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.empty());
-    when(userRepository.save(user1)).thenReturn(user1);
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
+    when(userStorage.save(user1)).thenReturn(user1);
 
     var result = userService.createUser(user1);
     Assertions.assertNotNull(result);
@@ -100,7 +100,7 @@ public class UserServiceTest {
   @Test
   public void createUserShouldThrowValidationTest() {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
 
     Assertions.assertThrows(ValidationException.class, () -> userService.createUser(user1));
   }
@@ -110,8 +110,8 @@ public class UserServiceTest {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
     var userUpdated = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_2);
 
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
-    when(userRepository.update(user1)).thenReturn(userUpdated);
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
+    when(userStorage.update(user1)).thenReturn(userUpdated);
 
     var result = userService.updateUser(user1);
     Assertions.assertNotNull(result);
@@ -122,7 +122,7 @@ public class UserServiceTest {
   @Test
   public void updateUserShouldThrowNotFoundTest() {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.empty());
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> userService.updateUser(user1));
   }
@@ -131,8 +131,8 @@ public class UserServiceTest {
   public void deleteUserTest() {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
 
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
-    when(userRepository.delete(USER_ID_1)).thenReturn(true);
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
+    when(userStorage.delete(USER_ID_1)).thenReturn(true);
 
     var result = userService.deleteUser(USER_ID_1);
     Assertions.assertTrue(result);
@@ -140,7 +140,7 @@ public class UserServiceTest {
 
   @Test
   public void deleteUserShouldThrowNotFoundTest() {
-    when(userRepository.getUserById(USER_ID_1)).thenReturn(Optional.empty());
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> userService.deleteUser(USER_ID_1));
   }

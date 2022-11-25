@@ -6,10 +6,10 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @EnableCaching
 @SpringBootApplication
-public class PdpSpringCoreApplication {
+public class PdpSpringDataApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(PdpSpringCoreApplication.class, args);
+    SpringApplication.run(PdpSpringDataApplication.class, args);
   }
 
 }

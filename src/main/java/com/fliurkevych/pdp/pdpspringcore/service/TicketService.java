@@ -5,7 +5,7 @@ import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validatePla
 
 import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
-import com.fliurkevych.pdp.pdpspringcore.repository.TicketRepository;
+import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.xml.TicketsXml;
 import com.fliurkevych.pdp.pdpspringcore.xml.XmlService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,21 +28,21 @@ import java.util.stream.Collectors;
 public class TicketService {
 
   private final Random random;
-  private final TicketRepository ticketRepository;
+  private final TicketStorage ticketStorage;
   private final UserService userService;
   private final EventService eventService;
   private final XmlService xmlService;
   private final Converter<TicketsXml, List<Ticket>> ticketConverter;
 
   @Autowired
-  public TicketService(TicketRepository ticketRepository,
+  public TicketService(TicketStorage ticketStorage,
     UserService userService,
     EventService eventService,
     XmlService xmlService,
     Converter<TicketsXml, List<Ticket>> ticketConverter) {
     this.ticketConverter = ticketConverter;
     this.random = new Random();
-    this.ticketRepository = ticketRepository;
+    this.ticketStorage = ticketStorage;
     this.userService = userService;
     this.eventService = eventService;
     this.xmlService = xmlService;
@@ -61,24 +61,24 @@ public class TicketService {
     var ticket =
       new Ticket((long) random.nextInt(1000), event.getId(), user.getId(), place, category);
 
-    return ticketRepository.save(ticket);
+    return ticketStorage.save(ticket);
   }
 
   public List<Ticket> getBookedTicketsByUserId(Long userId, Pageable pageable) {
     var user = userService.getUserById(userId);
     log.info("Getting all booked tickets for user with name [{}]", user.getName());
-    return ticketRepository.getBookedTicketsForUser(userId, pageable);
+    return ticketStorage.getBookedTicketsForUser(userId, pageable);
   }
 
   public List<Ticket> getBookedTicketsByEventId(Long eventId, Pageable pageable) {
     var event = eventService.getEventById(eventId);
     log.info("Getting all booked tickets for event with title [{}]", event.getTitle());
-    return ticketRepository.getBookedTicketsForEvent(eventId, pageable);
+    return ticketStorage.getBookedTicketsForEvent(eventId, pageable);
   }
 
   public boolean cancelTicket(long ticketId) {
     log.info("Canceling ticket with id: [{}]", ticketId);
-    return ticketRepository.delete(ticketId);
+    return ticketStorage.delete(ticketId);
   }
 
   public boolean preloadTickets() {
@@ -94,7 +94,7 @@ public class TicketService {
 
     var savedTickets = zipWithIndex(tickets).stream()
       .map(TicketService::setId)
-      .map(ticketRepository::save)
+      .map(ticketStorage::save)
       .collect(Collectors.toList());
 
     return savedTickets.size() == tickets.size();

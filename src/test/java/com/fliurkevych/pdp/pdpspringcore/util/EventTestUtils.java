@@ -2,6 +2,7 @@ package com.fliurkevych.pdp.pdpspringcore.util;
 
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
 
@@ -17,7 +18,7 @@ public final class EventTestUtils {
   public static final Date DATE_1 = Date.from(Instant.now());
 
   public static Event buildEvent(Long id, String title, Date date) {
-    return new Event(id, title, date);
+    return new Event(id, title, date, BigDecimal.valueOf(100L));
   }
 
 }

@@ -25,7 +25,6 @@ public class CacheTicketStorage implements TicketStorage {
 
   private final Cache cache;
 
-  @Autowired
   public CacheTicketStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(TICKETS_CACHE_NAME);
   }

@@ -12,9 +12,10 @@ import java.util.List;
  * @author Oleh Fliurkevych
  */
 @Repository
-public interface DbEventRepository extends PagingAndSortingRepository<Event, Long> {
-  
+public interface EventRepository extends PagingAndSortingRepository<Event, Long> {
+
   List<Event> findAllByTitle(String title, Pageable pageable);
+
   List<Event> findAllByDate(Date date, Pageable pageable);
 
 }

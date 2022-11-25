@@ -3,7 +3,7 @@ package com.fliurkevych.pdp.pdpspringcore.service;
 import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
 import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
 import com.fliurkevych.pdp.pdpspringcore.model.User;
-import com.fliurkevych.pdp.pdpspringcore.repository.UserRepository;
+import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -19,37 +19,37 @@ import java.util.List;
 @Service
 public class UserService {
 
-  private final UserRepository userRepository;
+  private final UserStorage userStorage;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public UserService(UserStorage userStorage) {
+    this.userStorage = userStorage;
   }
 
   public User getUserById(Long userId) {
     log.info("Getting user by id: {}", userId);
     // TODO: consutructor of the NotFoundException can be customized, to omit unnecessary String.format each time
-    return userRepository.getUserById(userId).orElseThrow(() -> new NotFoundException(
+    return userStorage.getUserById(userId).orElseThrow(() -> new NotFoundException(
       String.format("Can not found element with key: [%s]", userId)));
   }
 
   public User getUserByEmail(String email) {
     log.info("Getting user by email: {}", email);
-    return userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException(
+    return userStorage.getUserByEmail(email).orElseThrow(() -> new NotFoundException(
       String.format("Can not found user by email: [%s]", email)));
   }
 
   public List<User> getUsersByName(String name, Pageable pageable) {
     log.info("Getting users by name: {}", name);
-    return userRepository.getUsersByName(name, pageable);
+    return userStorage.getUsersByName(name, pageable);
   }
 
   public User createUser(User user) {
     log.info("Creating new user with name [{}] and email [{}]", user.getName(), user.getEmail());
 
     // TODO: I'd suggest to add a sort of exists(user.getId()) method to the repository
-    if (userRepository.getUserById(user.getId()).isEmpty()) {
-      return userRepository.save(user);
+    if (userStorage.getUserById(user.getId()).isEmpty()) {
+      return userStorage.save(user);
     }
     throw new ValidationException(
       String.format("User with id [%s] have already created", user.getId()));
@@ -58,16 +58,16 @@ public class UserService {
   public User updateUser(User user) {
     log.info("Updating user with id [{}]", user.getId());
 
-    return userRepository.getUserById(user.getId())
-      .map(userRepository::update)
+    return userStorage.getUserById(user.getId())
+      .map(userStorage::update)
       .orElseThrow(() -> new NotFoundException(
         String.format("Can not found element with key: [%s]", user.getId())));
   }
 
   public boolean deleteUser(Long userId) {
     log.info("Deleting user with id [{}]", userId);
-    return userRepository.getUserById(userId)
-      .map(user -> userRepository.delete(user.getId()))
+    return userStorage.getUserById(userId)
+      .map(user -> userStorage.delete(user.getId()))
       .orElseThrow(() -> new NotFoundException(
         String.format("Can not found element with key: [%s]", userId)));
   }
@@ -75,7 +75,7 @@ public class UserService {
   public List<User> getAllUsers() {
     log.info("Getting all users");
 
-    return new ArrayList<>(userRepository.getAllUsers());
+    return new ArrayList<>(userStorage.getAllUsers());
   }
 
 }
