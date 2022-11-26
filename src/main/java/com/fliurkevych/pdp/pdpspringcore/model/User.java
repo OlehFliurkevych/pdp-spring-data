@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Data
@@ -17,7 +19,7 @@ import javax.persistence.Table;
 @Entity(name = "user")
 @NoArgsConstructor
 @AllArgsConstructor
-public class  User implements Serializable {
+public class User implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +28,8 @@ public class  User implements Serializable {
   private String name;
   @Column(columnDefinition = "VARCHAR(60)")
   private String email;
+  @OneToOne
+  @JoinColumn(name = "user_account_id", referencedColumnName = "id")
+  private UserAccount userAccount;
 
 }

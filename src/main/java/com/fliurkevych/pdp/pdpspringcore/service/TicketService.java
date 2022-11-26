@@ -59,7 +59,7 @@ public class TicketService {
     validatePlaceNumber(place);
 
     var ticket =
-      new Ticket((long) random.nextInt(1000), event.getId(), user.getId(), place, category);
+      new Ticket((long) random.nextInt(1000), event, user, place, category);
 
     return ticketStorage.save(ticket);
   }

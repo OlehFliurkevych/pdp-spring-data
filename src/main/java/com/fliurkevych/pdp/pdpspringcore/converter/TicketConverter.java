@@ -1,5 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.converter;
 
+import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.xml.TicketXml;
 import org.springframework.core.convert.converter.Converter;
@@ -14,8 +15,8 @@ public final class TicketConverter implements Converter<TicketXml, Ticket> {
   @Override
   public Ticket convert(TicketXml ticketXml) {
     var ticket = new Ticket();
-    ticket.setEventId(ticketXml.getEventId());
-    ticket.setUserId(ticketXml.getUserId());
+//    ticket.setEvent(ticketXml.getEventId());
+//    ticket.setUserId(ticketXml.getUserId());
     ticket.setPlace(ticketXml.getPlace());
     ticket.setCategory(ticketXml.getCategory());
     return ticket;

@@ -10,7 +10,6 @@ import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +41,7 @@ public class CacheTicketStorage implements TicketStorage {
     final var pageNum = pageable.getPageNumber();
     var allTickets = CacheUtils.getAllElements(cache, Ticket.class);
 
-    var filteredEvents = searchByLong(allTickets.values(), userId, Ticket::getUserId);
+    var filteredEvents = searchByLong(allTickets.values(), userId, t -> t.getUser().getId());
     var eventPages = splitInPages(filteredEvents, pageSize);
 
     validatePageResult(pageNum);
@@ -55,7 +54,7 @@ public class CacheTicketStorage implements TicketStorage {
     final var pageSize = pageable.getPageSize();
     var allTickets = CacheUtils.getAllElements(cache, Ticket.class);
 
-    var filteredEvents = searchByLong(allTickets.values(), eventId, Ticket::getEventId);
+    var filteredEvents = searchByLong(allTickets.values(), eventId, t -> t.getEvent().getId());
     var eventPages = splitInPages(filteredEvents, pageSize);
 
     validatePageResult(pageNum);

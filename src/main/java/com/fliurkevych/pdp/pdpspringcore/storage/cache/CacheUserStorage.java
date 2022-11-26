@@ -35,10 +35,10 @@ public class CacheUserStorage implements UserStorage {
   private void populateCache() {
     if (cache != null) {
       for (int i = 0; i < 1000; i++) {
-        var user = new User((long) i, "User" + i, "user_" + i + "@gmail.com");
-        var userId = user.getId();
-        cache.put(user.getId(), user);
-        log.info("Added new record to [users] cache with key: [{}]", userId);
+//        var user = new User((long) i, "User" + i, "user_" + i + "@gmail.com");
+//        var userId = user.getId();
+//        cache.put(user.getId(), user);
+//        log.info("Added new record to [users] cache with key: [{}]", userId);
       }
     }
   }

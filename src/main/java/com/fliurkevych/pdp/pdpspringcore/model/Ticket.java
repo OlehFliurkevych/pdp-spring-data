@@ -27,12 +27,12 @@ public class Ticket implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-//  @ManyToOne
-//  @JoinColumn(name = "event_id", table = "event", referencedColumnName = "id")
-  private Long eventId;
-//  @ManyToOne
-//  @JoinColumn(name = "user_id", table = "user", referencedColumnName = "id")
-  private Long userId;
+  @ManyToOne
+  @JoinColumn(name = "event_id", referencedColumnName = "id")
+  private Event event;
+  @ManyToOne
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  private User user;
   @Column(columnDefinition = "BIGINT(20)")
   private Integer place;
   @Enumerated(value = EnumType.STRING)
