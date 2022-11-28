@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -22,9 +25,11 @@ import javax.persistence.Table;
 public class UserAccount implements Serializable {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @OneToOne(mappedBy = "userAccount")
   private User user;
+  @Column(columnDefinition = "DECIMAL(19,2)")
   private BigDecimal balance;
 
 }
