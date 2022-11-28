@@ -6,7 +6,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import com.fliurkevych.pdp.pdpspringcore.converter.TicketConverter;
 import com.fliurkevych.pdp.pdpspringcore.converter.TicketsConverter;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
+import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
+import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.TicketTestUtils;
 import com.fliurkevych.pdp.pdpspringcore.xml.XmlService;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +29,10 @@ public class TicketServiceTest {
   private TicketStorage ticketStorage;
   @Mock
   private XmlService xmlService;
+  @Mock
+  private UserStorage userStorage;
+  @Mock
+  private EventStorage eventStorage;
 
   private TicketsConverter ticketConverter;
 
@@ -34,7 +40,7 @@ public class TicketServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.ticketConverter = new TicketsConverter(new TicketConverter());
+    this.ticketConverter = new TicketsConverter(new TicketConverter(eventStorage, userStorage));
 
     this.ticketService = new TicketService(
       ticketStorage,
