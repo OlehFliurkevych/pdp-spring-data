@@ -1,8 +1,8 @@
 package com.fliurkevych.pdp.pdpspringcore.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,10 +17,10 @@ import javax.persistence.Table;
 /**
  * @author Oleh Fliurkevych
  */
-@Data
 @Table
+@Setter
+@Getter
 @Entity(name = "user_account")
-@NoArgsConstructor
 @AllArgsConstructor
 public class UserAccount implements Serializable {
 

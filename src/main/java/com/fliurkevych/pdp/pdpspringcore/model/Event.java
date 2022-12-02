@@ -1,8 +1,8 @@
 package com.fliurkevych.pdp.pdpspringcore.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,10 +16,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Data
 @Table
+@Setter
+@Getter
 @Entity(name = "event")
-@NoArgsConstructor
 @AllArgsConstructor
 public class Event implements Serializable {
 

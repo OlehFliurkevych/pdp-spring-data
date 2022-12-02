@@ -1,8 +1,8 @@
 package com.fliurkevych.pdp.pdpspringcore.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -14,10 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Data
 @Table
+@Setter
+@Getter
 @Entity(name = "user")
-@NoArgsConstructor
 @AllArgsConstructor
 public class User implements Serializable {
 
