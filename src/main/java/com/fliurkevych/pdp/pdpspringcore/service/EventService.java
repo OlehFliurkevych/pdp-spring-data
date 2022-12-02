@@ -45,7 +45,7 @@ public class EventService {
     return eventStorage.getEventsForDay(date, pageable);
   }
 
-  public Event createEvent(Event event) {
+  public Event create(Event event) {
     log.info("Creating new event with title [{}], for date [{}]",
       event.getTitle(), event.getDate());
 
@@ -58,7 +58,7 @@ public class EventService {
     }
   }
 
-  public Event updateEvent(Event event) {
+  public Event update(Event event) {
     log.info("Updating event with id [{}]", event.getId());
 
     return eventStorage.getEventById(event.getId())
@@ -67,7 +67,7 @@ public class EventService {
         String.format("Can not found element with key: [%s]", event.getId())));
   }
 
-  public boolean deleteEvent(Long eventId) {
+  public boolean delete(Long eventId) {
     log.info("Deleting event with id [{}]", eventId);
 
     return eventStorage.getEventById(eventId)

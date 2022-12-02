@@ -33,6 +33,8 @@ public class TicketServiceTest {
   private UserStorage userStorage;
   @Mock
   private EventStorage eventStorage;
+  @Mock
+  private UserAccountService userAccountService;
 
   private TicketsConverter ticketConverter;
 
@@ -47,7 +49,8 @@ public class TicketServiceTest {
       null,
       null,
       xmlService,
-      ticketConverter);
+      ticketConverter,
+      userAccountService);
   }
 
   @Test

@@ -88,7 +88,7 @@ public class EventServiceTest {
     when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.empty());
     when(eventStorage.save(event1)).thenReturn(event1);
 
-    var result = eventService.createEvent(event1);
+    var result = eventService.create(event1);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(EVENT_1, result.getId());
   }
@@ -98,7 +98,7 @@ public class EventServiceTest {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.of(event));
 
-    Assertions.assertThrows(ValidationException.class, () -> eventService.createEvent(event));
+    Assertions.assertThrows(ValidationException.class, () -> eventService.create(event));
   }
 
   @Test
@@ -110,7 +110,7 @@ public class EventServiceTest {
     when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.of(event));
     when(eventStorage.update(eventUpdate)).thenReturn(eventUpdate);
 
-    var result = eventService.updateEvent(eventUpdate);
+    var result = eventService.update(eventUpdate);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(EVENT_1, result.getId());
     Assertions.assertEquals(TITLE_2, result.getTitle());
@@ -121,7 +121,7 @@ public class EventServiceTest {
     var event = EventTestUtils.buildEvent(EVENT_1, TITLE_1, DATE_1);
     when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NotFoundException.class, () -> eventService.updateEvent(event));
+    Assertions.assertThrows(NotFoundException.class, () -> eventService.update(event));
   }
 
   @Test
@@ -131,7 +131,7 @@ public class EventServiceTest {
     when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.of(event));
     when(eventStorage.delete(EVENT_1)).thenReturn(true);
 
-    var result = eventService.deleteEvent(EVENT_1);
+    var result = eventService.delete(EVENT_1);
     Assertions.assertTrue(result);
   }
 
@@ -139,7 +139,7 @@ public class EventServiceTest {
   public void deleteEventShouldThrowNotFoundTest() {
     when(eventStorage.getEventById(EVENT_1)).thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NotFoundException.class, () -> eventService.deleteEvent(EVENT_1));
+    Assertions.assertThrows(NotFoundException.class, () -> eventService.delete(EVENT_1));
   }
 
 }

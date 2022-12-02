@@ -44,7 +44,7 @@ public class UserService {
     return userStorage.getUsersByName(name, pageable);
   }
 
-  public User createUser(User user) {
+  public User create(User user) {
     log.info("Creating new user with name [{}] and email [{}]", user.getName(), user.getEmail());
 
     // TODO: I'd suggest to add a sort of exists(user.getId()) method to the repository
@@ -55,7 +55,7 @@ public class UserService {
       String.format("User with id [%s] have already created", user.getId()));
   }
 
-  public User updateUser(User user) {
+  public User update(User user) {
     log.info("Updating user with id [{}]", user.getId());
 
     return userStorage.getUserById(user.getId())
@@ -64,7 +64,7 @@ public class UserService {
         String.format("Can not found element with key: [%s]", user.getId())));
   }
 
-  public boolean deleteUser(Long userId) {
+  public boolean delete(Long userId) {
     log.info("Deleting user with id [{}]", userId);
     return userStorage.getUserById(userId)
       .map(user -> userStorage.delete(user.getId()))

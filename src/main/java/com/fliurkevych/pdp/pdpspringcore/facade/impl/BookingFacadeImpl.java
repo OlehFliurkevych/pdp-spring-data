@@ -54,17 +54,17 @@ public class BookingFacadeImpl implements BookingFacade {
 
   @Override
   public Event createEvent(Event event) {
-    return eventService.createEvent(event);
+    return eventService.create(event);
   }
 
   @Override
   public Event updateEvent(Event event) {
-    return eventService.updateEvent(event);
+    return eventService.update(event);
   }
 
   @Override
   public boolean deleteEvent(long eventId) {
-    return eventService.deleteEvent(eventId);
+    return eventService.delete(eventId);
   }
 
   @Override
@@ -84,17 +84,17 @@ public class BookingFacadeImpl implements BookingFacade {
 
   @Override
   public User createUser(User user) {
-    return userService.createUser(user);
+    return userService.create(user);
   }
 
   @Override
   public User updateUser(User user) {
-    return userService.updateUser(user);
+    return userService.update(user);
   }
 
   @Override
   public boolean deleteUser(long userId) {
-    return userService.deleteUser(userId);
+    return userService.delete(userId);
   }
 
   @Override

@@ -9,7 +9,6 @@ import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.xml.TicketsXml;
 import com.fliurkevych.pdp.pdpspringcore.xml.XmlService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
@@ -33,33 +32,33 @@ public class TicketService {
   private final EventService eventService;
   private final XmlService xmlService;
   private final Converter<TicketsXml, List<Ticket>> ticketConverter;
+  private final UserAccountService userAccountService;
 
-  @Autowired
-  public TicketService(TicketStorage ticketStorage,
-    UserService userService,
-    EventService eventService,
-    XmlService xmlService,
-    Converter<TicketsXml, List<Ticket>> ticketConverter) {
-    this.ticketConverter = ticketConverter;
+  public TicketService(TicketStorage ticketStorage, UserService userService,
+    EventService eventService, XmlService xmlService,
+    Converter<TicketsXml, List<Ticket>> ticketConverter, UserAccountService userAccountService) {
     this.random = new Random();
     this.ticketStorage = ticketStorage;
     this.userService = userService;
     this.eventService = eventService;
     this.xmlService = xmlService;
+    this.ticketConverter = ticketConverter;
+    this.userAccountService = userAccountService;
   }
 
   public Ticket bookTicket(BookTicketDto bookTicketDto) {
     var userId = bookTicketDto.getUserId();
     var eventId = bookTicketDto.getEventId();
     var place = bookTicketDto.getPlace();
-    var category = bookTicketDto.getCategory();
     log.info("User with id [{}] try to book ticket for event with id [{}]", userId, eventId);
     var user = userService.getUserById(userId);
     var event = eventService.getEventById(eventId);
     validatePlaceNumber(place);
+    var userAccount = user.getUserAccount();
+    userAccountService.reduceUserAccountBalance(userAccount, event);
 
     var ticket =
-      new Ticket((long) random.nextInt(1000), event, user, place, category);
+      new Ticket(null, event, user, place, bookTicketDto.getCategory());
 
     return ticketStorage.save(ticket);
   }

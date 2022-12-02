@@ -92,7 +92,7 @@ public class UserServiceTest {
     when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
     when(userStorage.save(user1)).thenReturn(user1);
 
-    var result = userService.createUser(user1);
+    var result = userService.create(user1);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(USER_ID_1, result.getId());
   }
@@ -102,7 +102,7 @@ public class UserServiceTest {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
     when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
 
-    Assertions.assertThrows(ValidationException.class, () -> userService.createUser(user1));
+    Assertions.assertThrows(ValidationException.class, () -> userService.create(user1));
   }
 
   @Test
@@ -113,7 +113,7 @@ public class UserServiceTest {
     when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
     when(userStorage.update(user1)).thenReturn(userUpdated);
 
-    var result = userService.updateUser(user1);
+    var result = userService.update(user1);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(USER_ID_1, result.getId());
     Assertions.assertEquals(EMAIL_2, result.getEmail());
@@ -124,7 +124,7 @@ public class UserServiceTest {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
     when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NotFoundException.class, () -> userService.updateUser(user1));
+    Assertions.assertThrows(NotFoundException.class, () -> userService.update(user1));
   }
 
   @Test
@@ -134,7 +134,7 @@ public class UserServiceTest {
     when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
     when(userStorage.delete(USER_ID_1)).thenReturn(true);
 
-    var result = userService.deleteUser(USER_ID_1);
+    var result = userService.delete(USER_ID_1);
     Assertions.assertTrue(result);
   }
 
@@ -142,7 +142,7 @@ public class UserServiceTest {
   public void deleteUserShouldThrowNotFoundTest() {
     when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
 
-    Assertions.assertThrows(NotFoundException.class, () -> userService.deleteUser(USER_ID_1));
+    Assertions.assertThrows(NotFoundException.class, () -> userService.delete(USER_ID_1));
   }
 
 }

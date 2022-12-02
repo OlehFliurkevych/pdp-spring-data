@@ -3,6 +3,7 @@ package com.fliurkevych.pdp.pdpspringcore.model;
 import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 @Setter
 @Getter
 @Entity(name = "ticket")
+@NoArgsConstructor
 @AllArgsConstructor
 public class Ticket implements Serializable {
 
