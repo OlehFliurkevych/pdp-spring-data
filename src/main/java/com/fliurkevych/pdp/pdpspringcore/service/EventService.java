@@ -1,17 +1,21 @@
 package com.fliurkevych.pdp.pdpspringcore.service;
 
+import static com.fliurkevych.pdp.pdpspringcore.converter.EventConverter.dtoToEntity;
+import static com.fliurkevych.pdp.pdpspringcore.converter.EventConverter.entityToDto;
+
+import com.fliurkevych.pdp.pdpspringcore.converter.EventConverter;
+import com.fliurkevych.pdp.pdpspringcore.dto.EventDto;
 import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
 import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
-import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Oleh Fliurkevych
@@ -27,42 +31,47 @@ public class EventService {
     this.eventStorage = eventStorage;
   }
 
-  public Event getEventById(Long eventId) {
+  public EventDto getEventById(Long eventId) {
     log.info("Getting event by id: {}", eventId);
     return eventStorage.getEventById(eventId)
+      .map(EventConverter::entityToDto)
       .orElseThrow(
         () -> new NotFoundException(
           String.format("Can not found element with key: [%s]", eventId)));
   }
 
-  public List<Event> getEventsByTitle(String title, Pageable pageable) {
+  public List<EventDto> getEventsByTitle(String title, Pageable pageable) {
     log.info("Getting events by title: {}", title);
-    return eventStorage.getEventsByTitle(title, pageable);
+    return eventStorage.getEventsByTitle(title, pageable).stream()
+      .map(EventConverter::entityToDto)
+      .collect(Collectors.toList());
   }
 
-  public List<Event> getEventsByDate(Date date, Pageable pageable) {
+  public List<EventDto> getEventsByDate(Date date, Pageable pageable) {
     log.info("Getting events by date: {}", date);
-    return eventStorage.getEventsForDay(date, pageable);
+    return eventStorage.getEventsForDay(date, pageable).stream()
+      .map(EventConverter::entityToDto)
+      .collect(Collectors.toList());
   }
 
-  public Event create(Event event) {
+  public EventDto create(EventDto event) {
     log.info("Creating new event with title [{}], for date [{}]",
       event.getTitle(), event.getDate());
 
-    // TODO: I'd suggest to add a sort of exists(event.getId()) method to the repository
-    if (eventStorage.getEventById(event.getId()).isEmpty()) {
-      return eventStorage.save(event);
+    if (!eventStorage.exists(event.getId())) {
+      var created = eventStorage.save(dtoToEntity(event));
+      return entityToDto(created);
     } else {
-      throw new ValidationException(
-        String.format("Event with id [%s] have already created", event.getId()));
+      throw new ValidationException("Event with id [%s] have already created", event.getId());
     }
   }
 
-  public Event update(Event event) {
+  public EventDto update(EventDto event) {
     log.info("Updating event with id [{}]", event.getId());
 
     return eventStorage.getEventById(event.getId())
       .map(eventStorage::update)
+      .map(EventConverter::entityToDto)
       .orElseThrow(() -> new NotFoundException(
         String.format("Can not found element with key: [%s]", event.getId())));
   }
@@ -76,10 +85,11 @@ public class EventService {
         String.format("Can not found element with key: [%s]", eventId)));
   }
 
-  public List<Event> getAllEvents() {
+  public List<EventDto> getAllEvents() {
     log.info("Getting all events");
-
-    return new ArrayList<>(eventStorage.getAllEvents());
+    return eventStorage.getAllEvents().stream()
+      .map(EventConverter::entityToDto)
+      .collect(Collectors.toList());
   }
 
 }

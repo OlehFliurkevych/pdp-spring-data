@@ -1,6 +1,6 @@
 -- pdp_spring.event definition
 
-CREATE TABLE `event` (
+create TABLE `event` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `date` date DEFAULT NULL,
   `ticket_price` decimal(19,2) DEFAULT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE `event` (
 
 -- pdp_spring.`user` definition
 
-CREATE TABLE `user` (
+create TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `email` varchar(60) DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE `user` (
 
 -- pdp_spring.user_account definition
 
-CREATE TABLE `user_account` (
+create TABLE `user_account` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `balance` decimal(19,2) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `user_account` (
 
 -- pdp_spring.ticket definition
 
-CREATE TABLE `ticket` (
+create TABLE `ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `category` varchar(255) DEFAULT NULL,
   `place` bigint(20) DEFAULT NULL,

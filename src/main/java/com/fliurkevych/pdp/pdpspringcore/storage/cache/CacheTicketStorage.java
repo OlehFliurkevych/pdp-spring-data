@@ -10,6 +10,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
@@ -30,8 +31,11 @@ public class CacheTicketStorage implements TicketStorage {
 
   @Override
   public Ticket save(Ticket ticket) {
-    cache.put(ticket.getId(), ticket);
-    return CacheUtils.getElementByKey(cache, ticket.getId(), Ticket.class)
+    var userId = ticket.getUser().getId();
+    var eventId = ticket.getEvent().getId();
+    var ticketId = Long.valueOf(StringUtils.join(userId, eventId));
+    cache.put(ticketId, ticket);
+    return CacheUtils.getElementByKey(cache, ticketId, Ticket.class)
       .orElse(null);
   }
 

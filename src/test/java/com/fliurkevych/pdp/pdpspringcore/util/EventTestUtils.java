@@ -1,5 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.util;
 
+import com.fliurkevych.pdp.pdpspringcore.dto.EventDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
 
 import java.math.BigDecimal;
@@ -19,6 +20,10 @@ public final class EventTestUtils {
 
   public static Event buildEvent(Long id, String title, Date date) {
     return new Event(id, title, date, BigDecimal.valueOf(100L));
+  }
+
+  public static EventDto buildEventDto(Long id, String title, Date date) {
+    return new EventDto(id, title, date, BigDecimal.valueOf(100L));
   }
 
 }

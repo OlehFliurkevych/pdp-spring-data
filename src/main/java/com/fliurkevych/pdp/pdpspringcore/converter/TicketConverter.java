@@ -1,37 +1,22 @@
 package com.fliurkevych.pdp.pdpspringcore.converter;
 
+import static com.fliurkevych.pdp.pdpspringcore.mapper.TicketMapper.TICKET_MAPPER;
+
+import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.TicketDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
-import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
-import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
-import com.fliurkevych.pdp.pdpspringcore.xml.TicketXml;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Oleh Fliurkevych
  */
-@Component
-public class TicketConverter implements Converter<TicketXml, Ticket> {
+public class TicketConverter {
 
-  private final EventStorage eventStorage;
-  private final UserStorage userStorage;
-
-  @Autowired
-  public TicketConverter(EventStorage eventStorage, UserStorage userStorage) {
-    this.eventStorage = eventStorage;
-    this.userStorage = userStorage;
+  public static TicketDto entityToDto(Ticket ticket) {
+    return TICKET_MAPPER.entityToDto(ticket);
   }
 
-  @Override
-  public Ticket convert(TicketXml ticketXml) {
-    var ticket = new Ticket();
-    userStorage.getUserById(ticketXml.getUserId())
-      .ifPresent(ticket::setUser);
-    eventStorage.getEventById(ticketXml.getEventId())
-      .ifPresent(ticket::setEvent);
-    ticket.setPlace(ticketXml.getPlace());
-    ticket.setCategory(ticketXml.getCategory());
-    return ticket;
+  public static Ticket dtoToEntity(TicketDto ticketDto) {
+    return TICKET_MAPPER.dtoToEntity(ticketDto);
   }
+  
 }

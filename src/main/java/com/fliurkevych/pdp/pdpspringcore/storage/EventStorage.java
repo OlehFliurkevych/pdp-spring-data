@@ -1,7 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.storage;
 
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -26,4 +25,6 @@ public interface EventStorage {
   boolean delete(Long eventId);
 
   Collection<Event> getAllEvents();
+
+  boolean exists(Long id);
 }

@@ -1,8 +1,8 @@
 package com.fliurkevych.pdp.pdpspringcore.util;
 
+import com.fliurkevych.pdp.pdpspringcore.dto.EventDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.UserAccountDto;
 import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
-import com.fliurkevych.pdp.pdpspringcore.model.Event;
-import com.fliurkevych.pdp.pdpspringcore.model.UserAccount;
 
 import java.math.BigDecimal;
 
@@ -17,13 +17,14 @@ public final class ValidationUtils {
     }
   }
 
-  public static void validateUserBalance(UserAccount userAccount, Event event) {
+  public static void validateUserBalance(UserAccountDto userAccount, EventDto event) {
     var balance = userAccount.getBalance();
     if (balance.equals(BigDecimal.ZERO)) {
-      throw new ValidationException("Balance of user account is empty");
+      throw new ValidationException("Balance of user account [%s] is empty", userAccount.getId());
     }
     if (balance.compareTo(event.getTicketPrice()) < 0) {
-      throw new ValidationException("User don't have enough money");
+      throw new ValidationException("User with account [%s] don't have enough money",
+        userAccount.getId());
     }
   }
 

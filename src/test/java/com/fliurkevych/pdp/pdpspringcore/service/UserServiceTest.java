@@ -10,11 +10,13 @@ import static org.mockito.Mockito.when;
 
 import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
 import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
+import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.UserTestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -88,32 +90,34 @@ public class UserServiceTest {
   @Test
   public void createUserTest() {
     var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
+    var userDto = UserTestUtils.buildUserDto(USER_ID_1, NAME_1, EMAIL_1);
 
-    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
-    when(userStorage.save(user1)).thenReturn(user1);
+    when(userStorage.exists(USER_ID_1)).thenReturn(false);
+    when(userStorage.save(ArgumentMatchers.any(User.class))).thenReturn(user1);
 
-    var result = userService.create(user1);
+    var result = userService.create(userDto);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(USER_ID_1, result.getId());
   }
 
   @Test
   public void createUserShouldThrowValidationTest() {
-    var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
-    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
+    var userDto = UserTestUtils.buildUserDto(USER_ID_1, NAME_1, EMAIL_1);
+    when(userStorage.exists(USER_ID_1)).thenReturn(true);
 
-    Assertions.assertThrows(ValidationException.class, () -> userService.create(user1));
+    Assertions.assertThrows(ValidationException.class, () -> userService.create(userDto));
   }
 
   @Test
   public void updateUserTest() {
-    var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
-    var userUpdated = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_2);
+    var userDto = UserTestUtils.buildUserDto(USER_ID_1, NAME_1, EMAIL_2);
+    var userBefore = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
+    var userAfter = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_2);
 
-    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(user1));
-    when(userStorage.update(user1)).thenReturn(userUpdated);
+    when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.of(userBefore));
+    when(userStorage.update(ArgumentMatchers.any(User.class))).thenReturn(userAfter);
 
-    var result = userService.update(user1);
+    var result = userService.update(userDto);
     Assertions.assertNotNull(result);
     Assertions.assertEquals(USER_ID_1, result.getId());
     Assertions.assertEquals(EMAIL_2, result.getEmail());
@@ -121,7 +125,7 @@ public class UserServiceTest {
 
   @Test
   public void updateUserShouldThrowNotFoundTest() {
-    var user1 = UserTestUtils.buildUser(USER_ID_1, NAME_1, EMAIL_1);
+    var user1 = UserTestUtils.buildUserDto(USER_ID_1, NAME_1, EMAIL_1);
     when(userStorage.getUserById(USER_ID_1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(NotFoundException.class, () -> userService.update(user1));

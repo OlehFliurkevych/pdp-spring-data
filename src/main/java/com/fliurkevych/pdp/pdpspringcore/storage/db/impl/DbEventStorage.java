@@ -4,6 +4,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.EventRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
@@ -56,7 +57,12 @@ public class DbEventStorage implements EventStorage {
 
   @Override
   public Collection<Event> getAllEvents() {
+    return eventRepository.findAll(PageRequest.of(Integer.MAX_VALUE, Integer.MAX_VALUE))
+      .getContent();
+  }
 
-    return null;
+  @Override
+  public boolean exists(Long id) {
+    return eventRepository.existsById(id);
   }
 }

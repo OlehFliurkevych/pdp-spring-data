@@ -28,4 +28,6 @@ public interface UserStorage {
 
   Collection<User> getAllUsers();
 
+  boolean exists(Long id);
+
 }

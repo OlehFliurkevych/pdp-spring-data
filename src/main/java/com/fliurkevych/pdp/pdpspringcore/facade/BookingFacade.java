@@ -1,8 +1,12 @@
 package com.fliurkevych.pdp.pdpspringcore.facade;
 
 import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.CreateUserAccountDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.EventDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.TicketDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.UserAccountDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.UserDto;
 import com.fliurkevych.pdp.pdpspringcore.model.Event;
-import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import com.fliurkevych.pdp.pdpspringcore.model.User;
 import org.springframework.data.domain.Pageable;
 
@@ -20,7 +24,7 @@ public interface BookingFacade {
    *
    * @return Event.
    */
-  Event getEventById(long eventId);
+  EventDto getEventById(long eventId);
 
   /**
    * Get list of events by matching title. Title is matched using 'contains' approach. In case
@@ -30,7 +34,7 @@ public interface BookingFacade {
    * @param pageable {@link Pageable}
    * @return List of events.
    */
-  List<Event> getEventsByTitle(String title, Pageable pageable);
+  List<EventDto> getEventsByTitle(String title, Pageable pageable);
 
   /**
    * Get list of events for specified day. In case nothing was found, empty list is returned.
@@ -39,7 +43,7 @@ public interface BookingFacade {
    * @param pageable {@link Pageable}
    * @return List of events.
    */
-  List<Event> getEventsForDay(Date day, Pageable pageable);
+  List<EventDto> getEventsForDay(Date day, Pageable pageable);
 
   /**
    * Creates new event. Event id should be auto-generated.
@@ -47,7 +51,7 @@ public interface BookingFacade {
    * @param event Event data.
    * @return Created Event object.
    */
-  Event createEvent(Event event);
+  EventDto createEvent(EventDto event);
 
   /**
    * Updates event using given data.
@@ -55,7 +59,7 @@ public interface BookingFacade {
    * @param event Event data for update. Should have id set.
    * @return Updated Event object.
    */
-  Event updateEvent(Event event);
+  EventDto updateEvent(EventDto event);
 
   /**
    * Deletes event by its id.
@@ -70,14 +74,14 @@ public interface BookingFacade {
    *
    * @return User.
    */
-  User getUserById(long userId);
+  UserDto getUserById(long userId);
 
   /**
    * Gets user by its email. Email is strictly matched.
    *
    * @return User.
    */
-  User getUserByEmail(String email);
+  UserDto getUserByEmail(String email);
 
   /**
    * Get list of users by matching name. Name is matched using 'contains' approach. In case nothing
@@ -87,15 +91,15 @@ public interface BookingFacade {
    * @param pageable {@link Pageable}
    * @return List of users.
    */
-  List<User> getUsersByName(String name, Pageable pageable);
+  List<UserDto> getUsersByName(String name, Pageable pageable);
 
   /**
    * Creates new user. User id should be auto-generated.
    *
-   * @param user User data.
+   * @param userDto User data.
    * @return Created User object.
    */
-  User createUser(User user);
+  UserDto createUser(UserDto userDto);
 
   /**
    * Updates user using given data.
@@ -103,7 +107,7 @@ public interface BookingFacade {
    * @param user User data for update. Should have id set.
    * @return Updated User object.
    */
-  User updateUser(User user);
+  UserDto updateUser(UserDto user);
 
   /**
    * Deletes user by its id.
@@ -120,7 +124,7 @@ public interface BookingFacade {
    * @return Booked ticket object.
    * @throws java.lang.IllegalStateException if this place has already been booked.
    */
-  Ticket bookTicket(BookTicketDto bookTicketDto);
+  TicketDto bookTicket(BookTicketDto bookTicketDto);
 
   /**
    * Get all booked tickets for specified user. Tickets should be sorted by event date in descending
@@ -130,7 +134,7 @@ public interface BookingFacade {
    * @param pageable {@link Pageable}
    * @return List of Ticket objects.
    */
-  List<Ticket> getBookedTicketsByUserId(Long userId, Pageable pageable);
+  List<TicketDto> getBookedTicketsByUserId(Long userId, Pageable pageable);
 
   /**
    * Get all booked tickets for specified event. Tickets should be sorted in by user email in
@@ -140,7 +144,7 @@ public interface BookingFacade {
    * @param pageable {@link Pageable}
    * @return List of Ticket objects.
    */
-  List<Ticket> getBookedTicketsByEventId(Long eventId, Pageable pageable);
+  List<TicketDto> getBookedTicketsByEventId(Long eventId, Pageable pageable);
 
   /**
    * Cancel ticket with a specified id.
@@ -155,14 +159,14 @@ public interface BookingFacade {
    *
    * @return List of {@link User} objects.
    */
-  List<User> getAllUsers();
+  List<UserDto> getAllUsers();
 
   /**
    * Get all events
    *
    * @return List of {@link Event} objects.
    */
-  List<Event> getAllEvents();
+  List<EventDto> getAllEvents();
 
   /**
    * Populate tickets storage based on predefined file
@@ -175,5 +179,15 @@ public interface BookingFacade {
    * @return pdf report
    */
   ByteArrayInputStream generatePdfTicketReportForUser(Long userId, Pageable pageable);
+
+  /**
+   * Creates new user account.
+   *
+   * @param createUserAccountDto User Account data
+   * @return Created User Account dto object.
+   */
+  UserAccountDto createUserAccount(CreateUserAccountDto createUserAccountDto);
+
+  UserAccountDto updateUserAccount(UserAccountDto userAccountDto);
 
 }

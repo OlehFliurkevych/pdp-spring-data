@@ -17,6 +17,7 @@ import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbEventStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbTicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbUserAccountStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbUserStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,7 @@ public class StorageConfig {
   @Value("${storage.type:DB}")
   private StorageType STORAGE_TYPE;
 
+  @Autowired
   private CacheManager cacheManager;
 
   @Bean

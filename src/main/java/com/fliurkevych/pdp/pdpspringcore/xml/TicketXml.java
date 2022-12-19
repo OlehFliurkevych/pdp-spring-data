@@ -1,7 +1,8 @@
 package com.fliurkevych.pdp.pdpspringcore.xml;
 
-import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
+import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -13,11 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Data
 @XmlRootElement(name = "ticket")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TicketXml {
-
-  private Long userId;
-  private Long eventId;
-  private Integer place;
-  private TicketCategory category;
+@EqualsAndHashCode(callSuper = true)
+public class TicketXml extends BookTicketDto {
 
 }

@@ -4,6 +4,7 @@ import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
@@ -55,6 +56,12 @@ public class DbUserStorage implements UserStorage {
 
   @Override
   public Collection<User> getAllUsers() {
-    return null;
+    return userRepository.findAll(PageRequest.of(Integer.MAX_VALUE, Integer.MAX_VALUE))
+      .getContent();
+  }
+
+  @Override
+  public boolean exists(Long id) {
+    return userRepository.existsById(id);
   }
 }

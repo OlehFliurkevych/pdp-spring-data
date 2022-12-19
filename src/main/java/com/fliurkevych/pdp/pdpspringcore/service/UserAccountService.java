@@ -1,10 +1,13 @@
 package com.fliurkevych.pdp.pdpspringcore.service;
 
+import static com.fliurkevych.pdp.pdpspringcore.converter.UserAccountConverter.createDtoToEntity;
+import static com.fliurkevych.pdp.pdpspringcore.converter.UserAccountConverter.dtoToEntity;
+import static com.fliurkevych.pdp.pdpspringcore.converter.UserAccountConverter.entityToDto;
 import static com.fliurkevych.pdp.pdpspringcore.util.ValidationUtils.validateUserBalance;
 
-import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
-import com.fliurkevych.pdp.pdpspringcore.model.Event;
-import com.fliurkevych.pdp.pdpspringcore.model.UserAccount;
+import com.fliurkevych.pdp.pdpspringcore.dto.CreateUserAccountDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.EventDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.UserAccountDto;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserAccountStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,27 +20,32 @@ import org.springframework.stereotype.Service;
 public class UserAccountService {
 
   private final UserAccountStorage userAccountStorage;
+  private final UserService userService;
 
-  public UserAccountService(UserAccountStorage userAccountStorage) {
+  public UserAccountService(UserAccountStorage userAccountStorage, UserService userService) {
     this.userAccountStorage = userAccountStorage;
+    this.userService = userService;
   }
 
-  public UserAccount getUserAccountByUserId(Long userId) {
-    log.info("Getting user account by user id: {}", userId);
-    return userAccountStorage.getUserAccountByUserId(userId)
-      .orElseThrow(
-        () -> new NotFoundException(
-          String.format("Can not found user account by user id: [%s]", userId)));
+  public UserAccountDto create(CreateUserAccountDto createUserAccountDto) {
+    log.info("Creating new user account for user with id [{}]", createUserAccountDto.getUserId());
+    var userDto = userService.getUserById(createUserAccountDto.getUserId());
+
+    var created = userAccountStorage.save(createDtoToEntity(createUserAccountDto, userDto));
+    log.info("Successfully created user account for user with id [{}]",
+      createUserAccountDto.getUserId());
+    return entityToDto(created);
   }
 
-  public UserAccount update(UserAccount userAccount) {
-    log.info("Updating user account with id [{}] for user with id [{}]", userAccount.getId(),
-      userAccount.getUser().getId());
-    return userAccountStorage.update(userAccount);
+  public UserAccountDto update(UserAccountDto userAccount) {
+    log.info("Updating user account with id [{}]", userAccount.getId());
+    var updated = userAccountStorage.update(dtoToEntity(userAccount));
+    log.info("Successfully update user account with id [{}]", updated.getId());
+    return entityToDto(updated);
   }
 
-  public UserAccount reduceUserAccountBalance(UserAccount userAccount,
-    Event event) {
+  public UserAccountDto reduceUserAccountBalance(UserAccountDto userAccount,
+    EventDto event) {
     log.info("Try to reduce user account with id [{}] for event with id [{}]",
       userAccount.getId(), event.getId());
     validateUserBalance(userAccount, event);

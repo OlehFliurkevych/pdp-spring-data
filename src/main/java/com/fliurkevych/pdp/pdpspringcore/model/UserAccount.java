@@ -1,6 +1,5 @@
 package com.fliurkevych.pdp.pdpspringcore.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +21,6 @@ import javax.persistence.Table;
 @Setter
 @Getter
 @Entity(name = "user_account")
-@AllArgsConstructor
 public class UserAccount implements Serializable {
 
   @Id
@@ -34,4 +32,8 @@ public class UserAccount implements Serializable {
   @Column(columnDefinition = "DECIMAL(19,2)")
   private BigDecimal balance;
 
+  public UserAccount(Long id, BigDecimal balance) {
+    this.id = id;
+    this.balance = balance;
+  }
 }

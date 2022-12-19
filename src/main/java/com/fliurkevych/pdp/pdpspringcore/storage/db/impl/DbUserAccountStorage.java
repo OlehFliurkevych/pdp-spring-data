@@ -4,8 +4,6 @@ import com.fliurkevych.pdp.pdpspringcore.model.UserAccount;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserAccountStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.UserAccountRepository;
 
-import java.util.Optional;
-
 /**
  * @author Oleh Fliurkevych
  */
@@ -18,13 +16,12 @@ public class DbUserAccountStorage implements UserAccountStorage {
   }
 
   @Override
-  public Optional<UserAccount> getUserAccountByUserId(Long userId) {
-    return userAccountRepository.findByUserId(userId);
-  }
-
-  @Override
   public UserAccount update(UserAccount userAccount) {
     return userAccountRepository.save(userAccount);
   }
 
+  @Override
+  public UserAccount save(UserAccount userAccount) {
+    return userAccountRepository.save(userAccount);
+  }
 }

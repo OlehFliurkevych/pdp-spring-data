@@ -2,6 +2,7 @@ package com.fliurkevych.pdp.pdpspringcore.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 @Setter
 @Getter
 @Entity(name = "user")
+@NoArgsConstructor
 @AllArgsConstructor
 public class User implements Serializable {
 
@@ -30,4 +32,9 @@ public class User implements Serializable {
   @OneToOne(mappedBy = "user")
   private UserAccount userAccount;
 
+  public User(Long id, String name, String email) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+  }
 }

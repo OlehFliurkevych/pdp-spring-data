@@ -1,8 +1,8 @@
 package com.fliurkevych.pdp.pdpspringcore.controller;
 
 import com.fliurkevych.pdp.pdpspringcore.dto.BookTicketDto;
+import com.fliurkevych.pdp.pdpspringcore.dto.TicketDto;
 import com.fliurkevych.pdp.pdpspringcore.facade.BookingFacade;
-import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Pageable;
@@ -35,18 +35,18 @@ public class TicketController {
   }
 
   @PostMapping(path = "/")
-  public ResponseEntity<Ticket> bookTicket(@RequestBody BookTicketDto bookTicketDto) {
+  public ResponseEntity<TicketDto> bookTicket(@RequestBody BookTicketDto bookTicketDto) {
     return ResponseEntity.ok(bookingFacade.bookTicket(bookTicketDto));
   }
 
   @GetMapping(path = "/search/user/{userId}")
-  public ResponseEntity<List<Ticket>> getBookedTicketsByUserId(@PathVariable Long userId,
+  public ResponseEntity<List<TicketDto>> getBookedTicketsByUserId(@PathVariable Long userId,
     @PageableDefault Pageable pageable) {
     return ResponseEntity.ok(bookingFacade.getBookedTicketsByUserId(userId, pageable));
   }
 
   @GetMapping(path = "/search/event/{eventId}")
-  public ResponseEntity<List<Ticket>> getBookedTicketsByEventId(@PathVariable Long eventId,
+  public ResponseEntity<List<TicketDto>> getBookedTicketsByEventId(@PathVariable Long eventId,
     @PageableDefault Pageable pageable) {
     return ResponseEntity.ok(bookingFacade.getBookedTicketsByEventId(eventId, pageable));
   }

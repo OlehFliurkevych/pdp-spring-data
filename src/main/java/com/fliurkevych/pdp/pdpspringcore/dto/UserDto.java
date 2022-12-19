@@ -1,6 +1,5 @@
 package com.fliurkevych.pdp.pdpspringcore.dto;
 
-import com.fliurkevych.pdp.pdpspringcore.enums.TicketCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookTicketDto {
+public class UserDto {
 
-  private Long userId;
-  private Long eventId;
-  private Integer place;
-  private TicketCategory category;
+  private Long id;
+  private String name;
+  private String email;
+  private UserAccountDto userAccount;
 
 }

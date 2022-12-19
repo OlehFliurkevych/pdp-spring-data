@@ -1,16 +1,20 @@
 package com.fliurkevych.pdp.pdpspringcore.service;
 
+import static com.fliurkevych.pdp.pdpspringcore.converter.UserConverter.dtoToEntity;
+import static com.fliurkevych.pdp.pdpspringcore.converter.UserConverter.entityToDto;
+
+import com.fliurkevych.pdp.pdpspringcore.converter.UserConverter;
+import com.fliurkevych.pdp.pdpspringcore.dto.UserDto;
 import com.fliurkevych.pdp.pdpspringcore.exception.NotFoundException;
 import com.fliurkevych.pdp.pdpspringcore.exception.ValidationException;
-import com.fliurkevych.pdp.pdpspringcore.model.User;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Oleh Fliurkevych
@@ -26,40 +30,45 @@ public class UserService {
     this.userStorage = userStorage;
   }
 
-  public User getUserById(Long userId) {
+  public UserDto getUserById(Long userId) {
     log.info("Getting user by id: {}", userId);
-    // TODO: consutructor of the NotFoundException can be customized, to omit unnecessary String.format each time
-    return userStorage.getUserById(userId).orElseThrow(() -> new NotFoundException(
-      String.format("Can not found element with key: [%s]", userId)));
+    return userStorage.getUserById(userId)
+      .map(UserConverter::entityToDto)
+      .orElseThrow(() -> new NotFoundException(
+        String.format("Can not found element with key: [%s]", userId)));
   }
 
-  public User getUserByEmail(String email) {
+  public UserDto getUserByEmail(String email) {
     log.info("Getting user by email: {}", email);
-    return userStorage.getUserByEmail(email).orElseThrow(() -> new NotFoundException(
-      String.format("Can not found user by email: [%s]", email)));
+    return userStorage.getUserByEmail(email)
+      .map(UserConverter::entityToDto)
+      .orElseThrow(() -> new NotFoundException(
+        String.format("Can not found user by email: [%s]", email)));
   }
 
-  public List<User> getUsersByName(String name, Pageable pageable) {
+  public List<UserDto> getUsersByName(String name, Pageable pageable) {
     log.info("Getting users by name: {}", name);
-    return userStorage.getUsersByName(name, pageable);
+    return userStorage.getUsersByName(name, pageable).stream()
+      .map(UserConverter::entityToDto)
+      .collect(Collectors.toList());
   }
 
-  public User create(User user) {
-    log.info("Creating new user with name [{}] and email [{}]", user.getName(), user.getEmail());
+  public UserDto create(UserDto userDto) {
+    log.info("Creating new user with name [{}] and email [{}]", userDto.getName(),
+      userDto.getEmail());
 
-    // TODO: I'd suggest to add a sort of exists(user.getId()) method to the repository
-    if (userStorage.getUserById(user.getId()).isEmpty()) {
-      return userStorage.save(user);
+    if (!userStorage.exists(userDto.getId())) {
+      return entityToDto(userStorage.save(dtoToEntity(userDto)));
     }
-    throw new ValidationException(
-      String.format("User with id [%s] have already created", user.getId()));
+    throw new ValidationException("User with id [%s] have already created", userDto.getId());
   }
 
-  public User update(User user) {
+  public UserDto update(UserDto user) {
     log.info("Updating user with id [{}]", user.getId());
 
     return userStorage.getUserById(user.getId())
       .map(userStorage::update)
+      .map(UserConverter::entityToDto)
       .orElseThrow(() -> new NotFoundException(
         String.format("Can not found element with key: [%s]", user.getId())));
   }
@@ -72,10 +81,12 @@ public class UserService {
         String.format("Can not found element with key: [%s]", userId)));
   }
 
-  public List<User> getAllUsers() {
+  public List<UserDto> getAllUsers() {
     log.info("Getting all users");
 
-    return new ArrayList<>(userStorage.getAllUsers());
+    return userStorage.getAllUsers().stream()
+      .map(UserConverter::entityToDto)
+      .collect(Collectors.toList());
   }
 
 }

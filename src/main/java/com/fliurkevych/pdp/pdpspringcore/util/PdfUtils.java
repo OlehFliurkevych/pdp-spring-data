@@ -1,6 +1,6 @@
 package com.fliurkevych.pdp.pdpspringcore.util;
 
-import com.fliurkevych.pdp.pdpspringcore.model.Ticket;
+import com.fliurkevych.pdp.pdpspringcore.dto.TicketDto;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -24,7 +24,7 @@ import java.util.List;
 @Component
 public class PdfUtils {
 
-  public static ByteArrayInputStream generateTicketsReport(List<Ticket> tickets) {
+  public static ByteArrayInputStream generateTicketsReport(List<TicketDto> tickets) {
 
     Document document = new Document();
     ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -58,7 +58,7 @@ public class PdfUtils {
       hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
       table.addCell(hcell);
 
-      for (Ticket ticket : tickets) {
+      for (TicketDto ticket : tickets) {
 
         PdfPCell cell;
 

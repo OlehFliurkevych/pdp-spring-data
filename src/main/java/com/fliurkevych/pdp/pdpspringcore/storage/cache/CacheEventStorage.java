@@ -11,20 +11,15 @@ import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheConstants;
 import com.fliurkevych.pdp.pdpspringcore.util.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
 
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import javax.annotation.PostConstruct;
 
 @Slf4j
 public class CacheEventStorage implements EventStorage {
@@ -37,19 +32,6 @@ public class CacheEventStorage implements EventStorage {
   // this annotation will be skipped, since this class is not marked as @Component or @Service, etc...
   public CacheEventStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(CacheConstants.EVENTS_CACHE_NAME);
-  }
-
-  @PostConstruct
-  public void populateCache() {
-    if (cache != null) {
-      for (int i = 0; i < 500; i++) {
-        var event = new Event((long) i, "Event title #" + i,
-          Date.from(Instant.now().plus(Duration.ofDays(random.nextInt(15) * 365L))),
-          BigDecimal.valueOf(random.nextInt(100)));
-        var eventId = event.getId();
-        cache.put(eventId, event);
-      }
-    }
   }
 
   @Override
@@ -103,5 +85,10 @@ public class CacheEventStorage implements EventStorage {
   @Override
   public Collection<Event> getAllEvents() {
     return CacheUtils.getAllElements(cache, Event.class).values();
+  }
+
+  @Override
+  public boolean exists(Long id) {
+    return CacheUtils.getElementByKey(cache, id, Event.class).isPresent();
   }
 }

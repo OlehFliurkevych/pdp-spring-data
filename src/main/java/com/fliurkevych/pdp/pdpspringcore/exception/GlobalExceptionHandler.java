@@ -1,51 +1,64 @@
 package com.fliurkevych.pdp.pdpspringcore.exception;
 
-import com.fliurkevych.pdp.pdpspringcore.util.ExceptionUtils;
+import com.fliurkevych.pdp.pdpspringcore.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
  * @author Oleh Fliurkevych
  */
 @Slf4j
 @ControllerAdvice
-public class GlobalExceptionHandler implements HandlerExceptionResolver {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @Override
-  public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
-    Object handler, Exception ex) {
-    try {
-      // TODO: likely to replace this with switch expression in java 18
-      if (ex instanceof NotFoundException) {
-        return handleNotFoundException(ex);
-      } else if (ex instanceof NotSupportedException) {
-        return handleNotSupportedException(ex);
-      } else if (ex instanceof ValidationException) {
-        return handleValidationException(ex);
-      }
-    } catch (Exception handlerException) {
-      log.warn("Handling of [" + ex.getClass().getName() + "] " +
-        " resulted in Exception", handlerException);
-    }
-    return null;
+  @ExceptionHandler(value = {Exception.class})
+  protected ResponseEntity<Object> handleBaseException(final Exception e,
+    final WebRequest request) {
+    var message = e.getMessage();
+    log.error(message, e);
+
+    var error = ErrorResponse.of(message);
+    return handleExceptionInternal(e, error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
+      request);
   }
 
-  private ModelAndView handleNotFoundException(Exception ex) {
-    return ExceptionUtils.buildErrorModelAndView(ex.getMessage(), HttpStatus.NOT_FOUND);
+  @ExceptionHandler(value = {NotFoundException.class})
+  protected ResponseEntity<Object> handleNotFoundException(final NotFoundException e,
+    final WebRequest request) {
+    var message = e.getMessage();
+    log.error(message, e);
+
+    var error = ErrorResponse.of(message);
+    return handleExceptionInternal(e, error, new HttpHeaders(), HttpStatus.NOT_FOUND,
+      request);
   }
 
-  private ModelAndView handleNotSupportedException(Exception ex) {
-    return ExceptionUtils.buildErrorModelAndView(ex.getMessage(), HttpStatus.NOT_IMPLEMENTED);
+  @ExceptionHandler(value = {NotSupportedException.class})
+  protected ResponseEntity<Object> handleNotSupportedException(final NotSupportedException e,
+    final WebRequest request) {
+    var message = e.getMessage();
+    log.error(message, e);
+
+    var error = ErrorResponse.of(message);
+    return handleExceptionInternal(e, error, new HttpHeaders(),
+      HttpStatus.NOT_IMPLEMENTED, request);
   }
 
-  private ModelAndView handleValidationException(Exception ex) {
-    return ExceptionUtils.buildErrorModelAndView(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  @ExceptionHandler(value = {ValidationException.class})
+  protected ResponseEntity<Object> handleValidationException(final ValidationException e,
+    final WebRequest request) {
+    var message = e.getMessage();
+    log.error(message, e);
+
+    var error = ErrorResponse.of(message);
+    return handleExceptionInternal(e, error, new HttpHeaders(),
+      HttpStatus.BAD_REQUEST, request);
   }
 
 }

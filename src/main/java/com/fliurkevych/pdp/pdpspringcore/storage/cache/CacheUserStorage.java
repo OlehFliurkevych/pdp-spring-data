@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.PostConstruct;
 
 /**
  * @author Oleh Fliurkevych
@@ -29,18 +28,6 @@ public class CacheUserStorage implements UserStorage {
 
   public CacheUserStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(USERS_CACHE_NAME);
-  }
-
-  @PostConstruct
-  private void populateCache() {
-    if (cache != null) {
-      for (int i = 0; i < 1000; i++) {
-//        var user = new User((long) i, "User" + i, "user_" + i + "@gmail.com");
-//        var userId = user.getId();
-//        cache.put(user.getId(), user);
-//        log.info("Added new record to [users] cache with key: [{}]", userId);
-      }
-    }
   }
 
   @Override
@@ -92,4 +79,8 @@ public class CacheUserStorage implements UserStorage {
     return CacheUtils.getAllElements(cache, User.class).values();
   }
 
+  @Override
+  public boolean exists(Long id) {
+    return CacheUtils.getElementByKey(cache, id, User.class).isPresent();
+  }
 }

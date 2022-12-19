@@ -1,7 +1,7 @@
 package com.fliurkevych.pdp.pdpspringcore.controller;
 
+import com.fliurkevych.pdp.pdpspringcore.dto.EventDto;
 import com.fliurkevych.pdp.pdpspringcore.facade.BookingFacade;
-import com.fliurkevych.pdp.pdpspringcore.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -34,34 +34,34 @@ public class EventController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Event>> getAllEvents() {
+  public ResponseEntity<List<EventDto>> getAllEvents() {
     return ResponseEntity.ok(bookingFacade.getAllEvents());
   }
 
   @GetMapping(path = "/{eventId}")
-  public ResponseEntity<Event> getEventById(@PathVariable Long eventId) {
+  public ResponseEntity<EventDto> getEventById(@PathVariable Long eventId) {
     return ResponseEntity.ok(bookingFacade.getEventById(eventId));
   }
 
   @GetMapping(path = "/search/title")
-  public ResponseEntity<List<Event>> getEventsByTitle(@RequestParam String title,
+  public ResponseEntity<List<EventDto>> getEventsByTitle(@RequestParam String title,
     @PageableDefault Pageable pageable) {
     return ResponseEntity.ok(bookingFacade.getEventsByTitle(title, pageable));
   }
 
   @GetMapping(path = "/search/date")
-  public ResponseEntity<List<Event>> getEventsByDate(@RequestParam Date date,
+  public ResponseEntity<List<EventDto>> getEventsByDate(@RequestParam Date date,
     @PageableDefault Pageable pageable) {
     return ResponseEntity.ok(bookingFacade.getEventsForDay(date, pageable));
   }
 
   @PostMapping(path = "/")
-  public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+  public ResponseEntity<EventDto> createEvent(@RequestBody EventDto event) {
     return ResponseEntity.ok(bookingFacade.createEvent(event));
   }
 
   @PutMapping(path = "/")
-  public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
+  public ResponseEntity<EventDto> updateEvent(@RequestBody EventDto event) {
     return ResponseEntity.ok(bookingFacade.updateEvent(event));
   }
 
