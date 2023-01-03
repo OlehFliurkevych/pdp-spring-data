@@ -74,7 +74,8 @@ public class CacheEventStorage implements EventStorage {
   @Override
   public Event update(Event event) {
     cache.evictIfPresent(event.getId());
-    return (Event) cache.putIfAbsent(event.getId(), event).get();
+    cache.put(event.getId(), event);
+    return cache.get(event.getId(), Event.class);
   }
 
   @Override

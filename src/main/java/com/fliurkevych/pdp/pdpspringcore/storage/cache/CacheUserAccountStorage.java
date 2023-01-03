@@ -23,7 +23,8 @@ public class CacheUserAccountStorage implements UserAccountStorage {
   @Override
   public UserAccount update(UserAccount userAccount) {
     cache.evictIfPresent(userAccount.getId());
-    return (UserAccount) cache.putIfAbsent(userAccount.getId(), userAccount).get();
+    cache.put(userAccount.getId(), userAccount);
+    return cache.get(userAccount.getId(), UserAccount.class);
   }
 
   @Override

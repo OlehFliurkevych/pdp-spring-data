@@ -52,7 +52,8 @@ public class TicketService {
     var event = eventService.getEventById(eventId);
     validatePlaceNumber(place);
     var userAccount = user.getUserAccount();
-    userAccountService.update(userAccountService.reduceUserAccountBalance(userAccount, event));
+    var updateUserAccount = userAccountService.reduceUserAccountBalance(userAccount, event);
+    log.info("Reduced balance of user account with id [{}]", updateUserAccount.getId());
 
     var ticket =
       new Ticket(null, dtoToEntity(event), dtoToEntity(user), place, bookTicketDto.getCategory());

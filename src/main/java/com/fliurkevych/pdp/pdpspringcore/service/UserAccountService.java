@@ -50,7 +50,7 @@ public class UserAccountService {
       userAccount.getId(), event.getId());
     validateUserBalance(userAccount, event);
     userAccount.setBalance(userAccount.getBalance().subtract(event.getTicketPrice()));
-    return this.update(userAccount);
+    return update(userAccount);
   }
 
 }

@@ -66,7 +66,8 @@ public class CacheUserStorage implements UserStorage {
   @Override
   public User update(User user) {
     cache.evictIfPresent(user.getId());
-    return (User) cache.putIfAbsent(user.getId(), user).get();
+    cache.put(user.getId(), user);
+    return cache.get(user.getId(), User.class);
   }
 
   @Override
