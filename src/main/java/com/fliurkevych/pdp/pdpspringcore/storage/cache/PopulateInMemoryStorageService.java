@@ -28,14 +28,14 @@ import javax.annotation.PostConstruct;
 @Component
 @DependsOn({"eventStorage", "userStorage", "ticketStorage"})
 @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "CACHE")
-public class PopulateCacheService {
+public class PopulateInMemoryStorageService {
 
   private final Random random;
   private final Cache eventCache;
   private final Cache userCache;
   private final Cache userAccountCache;
 
-  public PopulateCacheService(CacheManager cacheManager) {
+  public PopulateInMemoryStorageService(CacheManager cacheManager) {
     this.random = new Random();
     this.eventCache = cacheManager.getCache(EVENTS_CACHE_NAME);
     this.userCache = cacheManager.getCache(USERS_CACHE_NAME);

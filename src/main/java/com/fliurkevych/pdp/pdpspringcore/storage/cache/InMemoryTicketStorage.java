@@ -21,11 +21,11 @@ import java.util.List;
  * @author Oleh Fliurkevych
  */
 @Slf4j
-public class CacheTicketStorage implements TicketStorage {
+public class InMemoryTicketStorage implements TicketStorage {
 
   private final Cache cache;
 
-  public CacheTicketStorage(CacheManager cacheManager) {
+  public InMemoryTicketStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(TICKETS_CACHE_NAME);
   }
 

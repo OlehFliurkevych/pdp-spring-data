@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
-public class CacheEventStorage implements EventStorage {
+public class InMemoryEventStorage implements EventStorage {
 
   private static final Random random = new Random();
 
@@ -30,7 +30,7 @@ public class CacheEventStorage implements EventStorage {
 
   // TODO: since you are creating this event storage via the configuration, no need to declare constructor as autowired
   // this annotation will be skipped, since this class is not marked as @Component or @Service, etc...
-  public CacheEventStorage(CacheManager cacheManager) {
+  public InMemoryEventStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(CacheConstants.EVENTS_CACHE_NAME);
   }
 

@@ -5,10 +5,10 @@ import com.fliurkevych.pdp.pdpspringcore.storage.EventStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.TicketStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserAccountStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.UserStorage;
-import com.fliurkevych.pdp.pdpspringcore.storage.cache.CacheEventStorage;
-import com.fliurkevych.pdp.pdpspringcore.storage.cache.CacheTicketStorage;
-import com.fliurkevych.pdp.pdpspringcore.storage.cache.CacheUserAccountStorage;
-import com.fliurkevych.pdp.pdpspringcore.storage.cache.CacheUserStorage;
+import com.fliurkevych.pdp.pdpspringcore.storage.cache.InMemoryEventStorage;
+import com.fliurkevych.pdp.pdpspringcore.storage.cache.InMemoryTicketStorage;
+import com.fliurkevych.pdp.pdpspringcore.storage.cache.InMemoryUserAccountStorage;
+import com.fliurkevych.pdp.pdpspringcore.storage.cache.InMemoryUserStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.EventRepository;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.TicketRepository;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.UserAccountRepository;
@@ -19,6 +19,7 @@ import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbUserAccountStorage;
 import com.fliurkevych.pdp.pdpspringcore.storage.db.impl.DbUserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,42 +35,50 @@ public class StorageConfig {
   private CacheManager cacheManager;
 
   @Bean
-  public EventStorage eventStorage(EventRepository eventRepository) {
-    switch (STORAGE_TYPE) {
-      case CACHE:
-        return new CacheEventStorage(cacheManager);
-      default:
-        return new DbEventStorage(eventRepository);
-    }
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "DB")
+  public EventStorage dbEventStorage(EventRepository eventRepository) {
+    return new DbEventStorage(eventRepository);
   }
 
   @Bean
-  public UserStorage userStorage(UserRepository userRepository) {
-    switch (STORAGE_TYPE) {
-      case CACHE:
-        return new CacheUserStorage(cacheManager);
-      default:
-        return new DbUserStorage(userRepository);
-    }
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "MEMORY")
+  public EventStorage memoryEventStorage() {
+    return new InMemoryEventStorage(cacheManager);
   }
 
   @Bean
-  public TicketStorage ticketStorage(TicketRepository ticketRepository) {
-    switch (STORAGE_TYPE) {
-      case CACHE:
-        return new CacheTicketStorage(cacheManager);
-      default:
-        return new DbTicketStorage(ticketRepository);
-    }
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "DB")
+  public UserStorage dbUserStorage(UserRepository userRepository) {
+    return new DbUserStorage(userRepository);
   }
 
   @Bean
-  public UserAccountStorage userAccountStorage(UserAccountRepository userAccountRepository) {
-    switch (STORAGE_TYPE) {
-      case CACHE:
-        return new CacheUserAccountStorage(cacheManager);
-      default:
-        return new DbUserAccountStorage(userAccountRepository);
-    }
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "MEMORY")
+  public UserStorage memoryUserStorage() {
+    return new InMemoryUserStorage(cacheManager);
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "DB")
+  public TicketStorage dbTicketStorage(TicketRepository ticketRepository) {
+    return new DbTicketStorage(ticketRepository);
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "MEMORY")
+  public TicketStorage memoryTicketStorage() {
+    return new InMemoryTicketStorage(cacheManager);
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "DB")
+  public UserAccountStorage dbUserAccountStorage(UserAccountRepository userAccountRepository) {
+    return new DbUserAccountStorage(userAccountRepository);
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "storage", name = "type", havingValue = "MEMORY")
+  public UserAccountStorage memoryUserAccountStorage() {
+    return new InMemoryUserAccountStorage(cacheManager);
   }
 }

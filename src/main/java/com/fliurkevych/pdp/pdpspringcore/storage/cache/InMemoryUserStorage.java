@@ -22,11 +22,11 @@ import java.util.Optional;
  * @author Oleh Fliurkevych
  */
 @Slf4j
-public class CacheUserStorage implements UserStorage {
+public class InMemoryUserStorage implements UserStorage {
 
   private final Cache cache;
 
-  public CacheUserStorage(CacheManager cacheManager) {
+  public InMemoryUserStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(USERS_CACHE_NAME);
   }
 

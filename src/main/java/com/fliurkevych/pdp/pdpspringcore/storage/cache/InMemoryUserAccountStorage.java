@@ -12,11 +12,11 @@ import org.springframework.cache.CacheManager;
  * @author Oleh Fliurkevych
  */
 @Slf4j
-public class CacheUserAccountStorage implements UserAccountStorage {
+public class InMemoryUserAccountStorage implements UserAccountStorage {
 
   private final Cache cache;
 
-  public CacheUserAccountStorage(CacheManager cacheManager) {
+  public InMemoryUserAccountStorage(CacheManager cacheManager) {
     this.cache = cacheManager.getCache(USER_ACCOUNTS_CACHE_NAME);
   }
 
